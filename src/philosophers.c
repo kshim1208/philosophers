@@ -6,7 +6,7 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/15 07:53:02 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/15 12:48:44 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/15 13:24:48 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,11 +78,11 @@ void	ft_start_surveil(t_philo *philo_arr, t_sveil *surveil)
 		done_to_eat = 0;
 		while (i < surveil -> philo_num)
 		{
+			printf("%llu\n", philo_arr[i].start_time);
 			if (ft_set_time_after_last_eat(&(philo_arr[i])) >= surveil -> time_to_die)
 			{
 				surveil -> stop = 1;
-				pthread_mutex_lock(surveil -> print);
-				printf("%lld %d died\n", ft_set_timestamp(&(philo_arr[i])), philo_arr[i].number);
+				ft_print_with_mutex(&(philo_arr[i]), surveil, "died");
 				break ;
 			}
 			else if (philo_arr[i].number_of_eat == surveil -> number_to_eat)

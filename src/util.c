@@ -6,7 +6,7 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/15 10:31:05 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/15 12:59:43 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/15 13:15:18 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,8 +64,8 @@ uint64_t	ft_set_time_after_last_eat(t_philo *philo)
 {
 	if (gettimeofday(&(philo -> time_value), 0) != 0)
 		return (-1);
-	return ((philo -> time_value.tv_sec * 1000 + philo -> time_value.tv_usec / 1000)
-		- (philo -> start_time) - (philo -> last_eat_time));
+	return (((philo -> time_value.tv_sec * 1000 + philo -> time_value.tv_usec / 1000)
+		- philo -> start_time) - (philo -> last_eat_time));
 }
 
 void	ft_print_with_mutex(t_philo *philo, t_sveil *surveil, char *str)
