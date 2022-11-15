@@ -6,13 +6,14 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/15 07:36:01 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/15 11:51:24 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/15 12:38:15 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/philosophers.h"
+#include <string.h>
+#include <stdlib.h>
 
-#include <pthread.h>
+#include "../include/philosophers.h"
 
 int	ft_init_prg(int argc, char **argv, t_prg *prg)
 {
@@ -31,22 +32,22 @@ int	ft_init_prg(int argc, char **argv, t_prg *prg)
 	else
 		prg -> surveil -> number_to_eat = -1;
 	// mutex_init
-	prg -> surveil -> print = (pthread_mutex_t *)print(sizeof(pthread_mutex_t));
+	prg -> surveil -> print = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t));
 	if (prg -> surveil -> print == 0)
 		return (0);
-	if (pthread_mutex_init(prg -> surveil -> print) != 0)
+	if (pthread_mutex_init(prg -> surveil -> print, 0) != 0)
 		return (0);
-	prg -> fork_arr = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t) * prg -> philo_num);
+	prg -> fork_arr = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t) * prg -> surveil -> philo_num);
 	if (prg -> fork_arr == 0)
 		return (0);
-	if (ft_set_fork_mutex(fork_arr, philo_num) == 0)
+	if (ft_set_fork_mutex(prg -> fork_arr, prg -> surveil -> philo_num) == 0)
 		return (0);
 	// t_philo 내부 설정
-	prg -> philo_arr = (t_philo *)malloc(sizeof(t_philo) * prg -> philo_num);
+	prg -> philo_arr = (t_philo *)malloc(sizeof(t_philo) * prg -> surveil -> philo_num);
 	if (prg -> philo_arr == 0)
 		return (0);
 		// 함수 구성하고 내부 필요 변수 설정
-	ft_set_philo(prg -> philo_arr, prg -> philo_num, prg -> fork_arr);
+	ft_set_philo(prg -> philo_arr, prg -> surveil -> philo_num, prg -> fork_arr, prg -> surveil);
 			// 반복문으로 number, left_fork, right_fork 설정
 			// tid는 pthread_create가, time은 스레드 분기 직전에 설정
 	return (1);

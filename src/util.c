@@ -6,14 +6,13 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/15 10:31:05 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/15 12:10:59 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/15 12:59:43 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/philosophers.h"
+#include <stdio.h>
 
-#include <sys/time.h>
-#include <stdint.h>
+#include "../include/philosophers.h"
 
 int	ft_atoi(const char *str)
 {
@@ -46,33 +45,27 @@ int	ft_atoi(const char *str)
 
 // 밑의 두 함수 제대로 작성한거 맞나?
 	// 제대로 작성하였다면, 이 두 함수를 합칠 수 있을까? 그럴 이유와 장단점은 있는가?
-uint64_t	ft_set_start_time(void)
+uint64_t	ft_set_start_time(t_philo *philo)
 {
-	timeval		time_value;
-
-	if (gettimeofday(&time_value, 0) == 0)
+	if (gettimeofday(&(philo -> time_value), 0) != 0)
 		return (-1);
-	return (time_value.tv_sec * 1000 + time_value.tv_usec / 1000);
+	return (philo -> time_value.tv_sec * 1000 + philo -> time_value.tv_usec / 1000);
 }
 
 uint64_t	ft_set_timestamp(t_philo *philo)
 {
-	timeval		time_value;
-
-	if (gettimeofday(&time_value, 0) == 0)
+	if (gettimeofday(&(philo -> time_value), 0) != 0)
 		return (-1);
-	return ((time_value.tv_sec * 1000 + time_value.tv_usec / 1000)
+	return ((philo -> time_value.tv_sec * 1000 + philo -> time_value.tv_usec / 1000)
 		- (philo -> start_time));
 }
 
 uint64_t	ft_set_time_after_last_eat(t_philo *philo)
 {
-	timeval		time_value;
-
-	if (gettimeofday(&time_value, 0) == 0)
+	if (gettimeofday(&(philo -> time_value), 0) != 0)
 		return (-1);
-	return ((time_value.tv_sec * 1000.0 + time_value.tv_usec / 1000)
-		- (philo -> last_eat_time));
+	return ((philo -> time_value.tv_sec * 1000 + philo -> time_value.tv_usec / 1000)
+		- (philo -> start_time) - (philo -> last_eat_time));
 }
 
 void	ft_print_with_mutex(t_philo *philo, t_sveil *surveil, char *str)

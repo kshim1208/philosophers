@@ -6,13 +6,15 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/15 07:53:02 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/15 12:13:14 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/15 12:48:44 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/philosophers.h"
+#include <unistd.h>
+#include <stdlib.h>
+#include <stdio.h>
 
-#include <pthread.h>
+#include "../include/philosophers.h"
 
 // 스레드 시작을 반복문으로 하는데, 이로 인한 각 스레드의 시작 시간 차이를 최소화할 수는 없을까?
 	// 일단 philo_arr[i]의 요소를 가능한 한 먼저 채워두고, time은 반복문 전에 한 번만 함수 호출하여 값을 넣는 식으로 만들었다.
@@ -21,8 +23,8 @@ int	ft_phiosophers_start(t_prg *prg, t_philo *philo_arr, t_sveil *surveil)
 {
 	int			i;
 
-	i = 0;산해서 저장
-	while (i < prg -> philo_num)
+	i = 0;
+	while (i < prg -> surveil -> philo_num)
 	{
 		pthread_create(&(philo_arr[i].tid), 0,
 			(void *)(&ft_philo_routine), (void *)&(philo_arr[i]));
@@ -41,7 +43,7 @@ void	ft_philo_routine(t_philo *philo)
 	t_sveil	*surveil;
 
 	surveil = philo -> surveil;
-	philo -> start_time = ft_set_start_time();
+	philo -> start_time = ft_set_start_time(philo);
 	if (philo -> number % 2 == 0)
 		usleep(1000);
 	while (surveil -> stop != 1)
@@ -52,12 +54,12 @@ void	ft_philo_routine(t_philo *philo)
 		philo -> last_eat_time = ft_set_timestamp(philo);
 		ft_print_with_mutex(philo, surveil, "has taken a fork");
 		ft_print_with_mutex(philo, surveil, "is eating");
-		usleep(surveil -> time_to_eat);
+		usleep(surveil -> time_to_eat * 1000);
 		pthread_mutex_unlock(philo -> first_fork);
 		pthread_mutex_unlock(philo -> second_fork);
 		philo -> number_of_eat++;
 		ft_print_with_mutex(philo, surveil, "is sleeping");
-		usleep(surveil -> time_to_sleep);
+		usleep(surveil -> time_to_sleep * 1000);
 		ft_print_with_mutex(philo, surveil, "is thinking");
 	}
 	return ;
@@ -78,9 +80,9 @@ void	ft_start_surveil(t_philo *philo_arr, t_sveil *surveil)
 		{
 			if (ft_set_time_after_last_eat(&(philo_arr[i])) >= surveil -> time_to_die)
 			{
-				surveil -> stop == 1;
+				surveil -> stop = 1;
 				pthread_mutex_lock(surveil -> print);
-				printf("%lld %d died\n", ft_set_timestamp(philo), philo_arr[i].number);
+				printf("%lld %d died\n", ft_set_timestamp(&(philo_arr[i])), philo_arr[i].number);
 				break ;
 			}
 			else if (philo_arr[i].number_of_eat == surveil -> number_to_eat)
@@ -108,12 +110,11 @@ void	ft_finish_philosophers(t_prg *prg)
 			pthread_mutex_destroy(prg -> surveil -> print);
 			free(prg -> surveil -> print);
 		}
-		free(surveil);
+		free(prg -> surveil);
 	}
-	if (prg -> philo_arr != 0)
-		free(prg -> philo_arr);
 	if (prg -> fork_arr != 0)
 		free(prg -> fork_arr);
-	free(prg);
+	if (prg -> philo_arr != 0)
+		free(prg -> philo_arr);
 	return ;
 }

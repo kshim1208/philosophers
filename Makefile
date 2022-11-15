@@ -26,7 +26,7 @@ BONUS_SRCS = $(BONUS_SRC_FILES)
 
 
 SRC_FILES	= main.c initialize.c philosophers.c util.c
-SRC_FILES	:= $(addprefix $(SRC_DIR)/, $(SRC_FILES))
+SRC_FILES	:= $(addprefix $(SRCDIR)/, $(SRC_FILES))
 
 SRCS = $(SRC_FILES)
 
