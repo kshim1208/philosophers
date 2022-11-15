@@ -6,7 +6,7 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/15 07:36:01 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/15 12:38:15 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/15 13:34:45 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,6 @@ void	ft_set_philo(t_philo *philo_arr, int philo_num,
 		philo_arr[i].surveil = surveil;
 		i++;
 	}
-	i++;
 	philo_arr[i].number = i + 1;
 	if (philo_arr[i].number % 2 == 1)
 	{

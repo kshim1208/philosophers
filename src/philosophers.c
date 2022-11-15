@@ -6,7 +6,7 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/15 07:53:02 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/15 13:24:48 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/15 13:38:50 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ int	ft_phiosophers_start(t_prg *prg, t_philo *philo_arr, t_sveil *surveil)
 			(void *)(&ft_philo_routine), (void *)&(philo_arr[i]));
 		i++;
 	}
+	usleep(1000);
 	ft_start_surveil(philo_arr, surveil);
 	ft_finish_philosophers(prg);
 	return (1);
@@ -78,7 +79,6 @@ void	ft_start_surveil(t_philo *philo_arr, t_sveil *surveil)
 		done_to_eat = 0;
 		while (i < surveil -> philo_num)
 		{
-			printf("%llu\n", philo_arr[i].start_time);
 			if (ft_set_time_after_last_eat(&(philo_arr[i])) >= surveil -> time_to_die)
 			{
 				surveil -> stop = 1;
