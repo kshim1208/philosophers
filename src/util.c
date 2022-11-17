@@ -6,7 +6,7 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/15 10:31:05 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/15 13:15:18 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/17 13:48:55 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,8 +70,12 @@ uint64_t	ft_set_time_after_last_eat(t_philo *philo)
 
 void	ft_print_with_mutex(t_philo *philo, t_sveil *surveil, char *str)
 {
-	pthread_mutex_lock(surveil -> print);
-	printf("%lld %d %s\n", ft_set_timestamp(philo), philo -> number, str);
-	pthread_mutex_unlock(surveil -> print);
+	if (surveil -> stop != 1)
+	{
+		pthread_mutex_lock(surveil -> print);
+		printf("%lld %d %s\n", ft_set_timestamp(philo), philo -> number, str);
+		pthread_mutex_unlock(surveil -> print);
+		return ;
+	}
 	return ;
 }

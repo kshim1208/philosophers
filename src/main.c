@@ -6,13 +6,15 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/14 16:54:31 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/15 12:38:09 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/17 12:45:10 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philosophers.h"
 
 // error 함수 만들고, 입력값으로 텍스트, 에러 코드 받아서 메인에서 반환하게 만들기?
+
+#include <stdio.h>
 
 int	main(int argc, char **argv)
 {

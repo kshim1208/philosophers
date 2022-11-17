@@ -6,7 +6,7 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/15 07:53:02 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/15 13:38:50 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/17 13:54:27 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,14 @@ int	ft_phiosophers_start(t_prg *prg, t_philo *philo_arr, t_sveil *surveil)
 	i = 0;
 	while (i < prg -> surveil -> philo_num)
 	{
+		philo_arr[i].start_time = ft_set_start_time(&(philo_arr[i]));
 		pthread_create(&(philo_arr[i].tid), 0,
-			(void *)(&ft_philo_routine), (void *)&(philo_arr[i]));
+			(void *)ft_philo_routine, (void *)&(philo_arr[i]));
 		i++;
 	}
-	usleep(1000);
-	ft_start_surveil(philo_arr, surveil);
+	pthread_create(&(surveil -> surveil_eat), 0,
+		(void *)ft_surveil_eat, (void *)surveil);
+	ft_surveil_end(philo_arr, surveil);
 	ft_finish_philosophers(prg);
 	return (1);
 }
@@ -44,21 +46,11 @@ void	ft_philo_routine(t_philo *philo)
 	t_sveil	*surveil;
 
 	surveil = philo -> surveil;
-	philo -> start_time = ft_set_start_time(philo);
 	if (philo -> number % 2 == 0)
 		usleep(1000);
 	while (surveil -> stop != 1)
 	{
-		pthread_mutex_lock(philo -> first_fork);
-		ft_print_with_mutex(philo, surveil, "has taken a fork");
-		pthread_mutex_lock(philo -> second_fork);
-		philo -> last_eat_time = ft_set_timestamp(philo);
-		ft_print_with_mutex(philo, surveil, "has taken a fork");
-		ft_print_with_mutex(philo, surveil, "is eating");
-		usleep(surveil -> time_to_eat * 1000);
-		pthread_mutex_unlock(philo -> first_fork);
-		pthread_mutex_unlock(philo -> second_fork);
-		philo -> number_of_eat++;
+		ft_philo_eat(philo, surveil);
 		ft_print_with_mutex(philo, surveil, "is sleeping");
 		usleep(surveil -> time_to_sleep * 1000);
 		ft_print_with_mutex(philo, surveil, "is thinking");
@@ -66,9 +58,82 @@ void	ft_philo_routine(t_philo *philo)
 	return ;
 }
 
-// number_of_eat이 number_to_eat 모두 만족하였는가는 어떻게 감지할까?
-// 반복문 안에서 number_of_eat이 횟수 만족했으면 '플래그' ++하고, 반복문 나갔을 때 이 값이 philo_num과 동일하면 종료 시작하게 만들까? 
-void	ft_start_surveil(t_philo *philo_arr, t_sveil *surveil)
+void	ft_philo_eat(t_philo *philo, t_sveil *surveil)
+{
+	pthread_mutex_lock(philo -> napkin);
+	pthread_mutex_lock(philo -> first_fork);
+	ft_print_with_mutex(philo, surveil, "has taken a fork");
+	pthread_mutex_lock(philo -> second_fork);
+	philo -> last_eat_time = ft_set_timestamp(philo);
+	ft_print_with_mutex(philo, surveil, "has taken a fork");
+	ft_print_with_mutex(philo, surveil, "is eating");
+	usleep(surveil -> time_to_eat * 1000);
+	pthread_mutex_unlock(philo -> second_fork);
+	pthread_mutex_unlock(philo -> first_fork);
+	pthread_mutex_unlock(philo -> napkin);
+	philo -> number_of_eat++;
+	return ;
+}
+
+void	ft_surveil_eat(t_sveil *surveil)
+{
+	int	i;
+
+	surveil -> eat_type = E_ODD;
+	while (surveil -> stop != 1)
+	{
+		if (surveil -> eat_type == E_ODD)
+		{
+			i = 2;
+			while (i < surveil -> philo_num)
+			{
+				pthread_mutex_unlock(&(surveil -> napkin_arr[i]));
+				i += 2;
+			}
+			usleep(surveil -> time_to_eat * 1000);
+			i = 2;
+			while (i < surveil -> philo_num)
+			{
+				pthread_mutex_lock(&(surveil -> napkin_arr[i]));
+				i += 2;
+			}
+		}
+		else if (surveil -> eat_type == E_EVEN)
+		{
+			i = 2;
+			while (i < surveil -> philo_num)
+			{
+				pthread_mutex_unlock(&(surveil -> napkin_arr[-1 + i]));
+				i += 2;
+			}
+			usleep(surveil -> time_to_eat * 1000);
+			i = 2;
+			while (i < surveil -> philo_num)
+			{
+				pthread_mutex_lock(&(surveil -> napkin_arr[-1 + i]));
+				i += 2;
+			}
+		}
+		/*
+		else if (surveil -> eat_type == E_LAST)
+		{
+			pthread_mutex_unlock(&(surveil -> napkin_arr[(surveil -> philo_num - 1)]));
+			pthread_mutex_lock(&(surveil -> napkin_arr[(surveil -> philo_num - 1)]));
+		}
+		if (surveil -> eat_type == E_LAST)
+			surveil -> eat_type = E_ODD;
+		else
+			surveil -> eat_type++;
+		*/
+		if (surveil -> eat_type == E_ODD)
+			surveil -> eat_type = E_EVEN;
+		else
+			surveil -> eat_type = E_ODD;
+	}
+	return ;
+}
+
+void	ft_surveil_end(t_philo *philo_arr, t_sveil *surveil)
 {
 	int	i;
 	int	done_to_eat;
@@ -112,8 +177,10 @@ void	ft_finish_philosophers(t_prg *prg)
 		}
 		free(prg -> surveil);
 	}
+	// fork mutex도 destroy 핋요
 	if (prg -> fork_arr != 0)
 		free(prg -> fork_arr);
+	// philo pthread_join 필요
 	if (prg -> philo_arr != 0)
 		free(prg -> philo_arr);
 	return ;

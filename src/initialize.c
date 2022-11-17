@@ -6,7 +6,7 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/15 07:36:01 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/15 13:34:45 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/17 13:56:03 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 #include <stdlib.h>
 
 #include "../include/philosophers.h"
+
+#include <stdio.h>
 
 int	ft_init_prg(int argc, char **argv, t_prg *prg)
 {
@@ -31,17 +33,27 @@ int	ft_init_prg(int argc, char **argv, t_prg *prg)
 		prg -> surveil -> number_to_eat = ft_atoi(argv[5]);
 	else
 		prg -> surveil -> number_to_eat = -1;
-	// mutex_init
+	// print 세팅
 	prg -> surveil -> print = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t));
 	if (prg -> surveil -> print == 0)
 		return (0);
 	if (pthread_mutex_init(prg -> surveil -> print, 0) != 0)
 		return (0);
+
+	// fork 세팅
 	prg -> fork_arr = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t) * prg -> surveil -> philo_num);
 	if (prg -> fork_arr == 0)
 		return (0);
-	if (ft_set_fork_mutex(prg -> fork_arr, prg -> surveil -> philo_num) == 0)
+	if (ft_set_mutex_num(prg -> fork_arr, prg -> surveil -> philo_num) == 0)
 		return (0);
+
+	// napkin 세팅
+	prg -> surveil -> napkin_arr = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t) * prg -> surveil -> philo_num);
+	if (prg -> surveil -> napkin_arr == 0)
+		return (0);
+	if (ft_set_mutex_num(prg -> surveil -> napkin_arr, prg -> surveil -> philo_num) == 0)
+		return (0);
+
 	// t_philo 내부 설정
 	prg -> philo_arr = (t_philo *)malloc(sizeof(t_philo) * prg -> surveil -> philo_num);
 	if (prg -> philo_arr == 0)
@@ -50,23 +62,25 @@ int	ft_init_prg(int argc, char **argv, t_prg *prg)
 	ft_set_philo(prg -> philo_arr, prg -> surveil -> philo_num, prg -> fork_arr, prg -> surveil);
 			// 반복문으로 number, left_fork, right_fork 설정
 			// tid는 pthread_create가, time은 스레드 분기 직전에 설정
+	
 	return (1);
 }
 
-int	ft_set_fork_mutex(pthread_mutex_t *fork_arr, int philo_num)
+int	ft_set_mutex_num(pthread_mutex_t *mutex_arr, int num)
 {
 	int	i;
 
 	i = 0;
-	while (i < philo_num)
+	while (i < num)
 	{
-		pthread_mutex_init(&(fork_arr[i]), 0);
+		pthread_mutex_init(&(mutex_arr[i]), 0);
 		i++;
 	}
 	return (1);
 }
 
-	// philo 1명일 때 처리 나중에 넣기
+	// philo 1명일 때의 동작
+	// 마지막 philo 설정하는 것도 반복문 안에 넣으면 될 것 같음
 void	ft_set_philo(t_philo *philo_arr, int philo_num,
 			pthread_mutex_t *fork_arr, t_sveil *surveil)
 {
@@ -79,13 +93,17 @@ void	ft_set_philo(t_philo *philo_arr, int philo_num,
 		philo_arr[i].number = i + 1;
 		if (philo_arr[i].number % 2 == 1)
 		{
+			philo_arr[i].napkin = &(surveil -> napkin_arr[i]);
 			philo_arr[i].first_fork = &(fork_arr[i]);
 			philo_arr[i].second_fork = &(fork_arr[i + 1]);
+			philo_arr[i].eat_type = E_ODD;
 		}
 		else
 		{
+			philo_arr[i].napkin = &(surveil -> napkin_arr[i]);
 			philo_arr[i].first_fork = &(fork_arr[i + 1]);
 			philo_arr[i].second_fork = &(fork_arr[i]);
+			philo_arr[i].eat_type = E_EVEN;
 		}
 		philo_arr[i].surveil = surveil;
 		i++;
@@ -93,13 +111,17 @@ void	ft_set_philo(t_philo *philo_arr, int philo_num,
 	philo_arr[i].number = i + 1;
 	if (philo_arr[i].number % 2 == 1)
 	{
+		philo_arr[i].napkin = &(surveil -> napkin_arr[i]);
 		philo_arr[i].first_fork = &(fork_arr[i]);
 		philo_arr[i].second_fork = &(fork_arr[0]);
+		philo_arr[i].eat_type = E_LAST;
 	}
 	else
 	{
+		philo_arr[i].napkin = &(surveil -> napkin_arr[i]);
 		philo_arr[i].first_fork = &(fork_arr[0]);
 		philo_arr[i].second_fork = &(fork_arr[i]);
+		philo_arr[i].eat_type = E_EVEN;
 	}
 	philo_arr[i].surveil = surveil;
 	return ;
