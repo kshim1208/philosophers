@@ -46,7 +46,7 @@ endif
 all : $(NAME)
 
 $(NAME): $(OBJECTS)
-	$(CC) $(CFLAGS) $(DEBUG) $(OBJECTS) -o $(NAME)
+	$(CC) $(CFLAGS) $(DEBUG) $(OBJECTS) -o $(NAME) -lpthread
 
 %.o	: %.c
 	$(CC) $(CFLAGS) $(DEBUG) $(HEADERS) -c $< -o $@
