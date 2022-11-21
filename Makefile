@@ -12,14 +12,14 @@ BONUS_HEADERS = -I$(BONUS_INCLUDES)
 
 INCLUDE = ./include
 
-BONUS_INCLUDES = ./bonus_include
+BONUS_INCLUDES = ./include_bonus
 
 SRCDIR = ./src
 
-BONUS_SRCDIR = ./bonus_src
+BONUS_SRCDIR = ./src_bonus
 
 
-BONUS_SRC_FILES	= main_bonus.c
+BONUS_SRC_FILES	= main_bonus.c initialize_bonus.c philosophers_bonus.c util_bonus.c
 BONUS_SRC_FILES	:= $(addprefix $(BONUS_SRCDIR)/, $(BONUS_SRC_FILES))
 
 BONUS_SRCS = $(BONUS_SRC_FILES)

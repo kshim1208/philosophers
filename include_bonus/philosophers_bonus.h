@@ -1,21 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philosophers.h                                     :+:      :+:    :+:   */
+/*   philosophers_bonus.h                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/11/14 16:56:00 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/21 22:53:36 by kshim            ###   ########.fr       */
+/*   Created: 2022/11/21 22:52:52 by kshim             #+#    #+#             */
+/*   Updated: 2022/11/21 22:53:33 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PHILOSOPHERS_H
-# define PHILOSOPHERS_H
+#ifndef PHILOSOPHERS_BONUS_H
+# define PHILOSOPHERS_BONUS_H
 
 # include <pthread.h>
 # include <stdint.h>
 # include <sys/time.h>
+
+// mutex 대신 sem 사용 예정
+// pthread_t 대신 프로세스 id 사용할 예정
 
 typedef enum e_odd_even_last{
 	E_ODD = 0,
@@ -56,27 +59,5 @@ typedef struct s_program_data{
 	pthread_mutex_t	*last_eat_arr;
 }			t_prg;
 
-int			ft_init_surveil_argument(int argc, char **argv, t_prg *prg);
-int			ft_init_mutex_and_philo(t_prg *prg, t_sveil *surveil);
-int			ft_set_mutex_num(pthread_mutex_t *mutex_arr, int num);
-void		ft_set_philo_only_one(t_philo *philo_arr,
-				pthread_mutex_t *last_eat_arr,
-				pthread_mutex_t *fork_arr, t_sveil *surveil);
-void		ft_set_philo(t_philo *philo_arr, pthread_mutex_t *last_eat_arr,
-				pthread_mutex_t *fork_arr, t_sveil *surveil);
 
-int			ft_phiosophers_start(t_prg *prg,
-				t_philo *philo_arr, t_sveil *surveil);
-int			ft_philo_routine_only_one(t_philo *philo);
-int			ft_philo_routine(t_philo *philo);
-int			ft_philo_eat(t_philo *philo, t_sveil *surveil);
-int			ft_surveil_end(t_philo *philo_arr, t_sveil *surveil);
-int			ft_finish_philosophers(t_prg *prg);
-
-int			ft_atoi(const char *str);
-uint64_t	ft_set_now_ms(void);
-uint64_t	ft_set_timestamp(t_philo *philo);
-uint64_t	ft_set_time_after_last_eat(t_philo *philo);
-int			ft_print_with_mutex(t_philo *philo, t_sveil *surveil, char *str);
-int			ft_usleep(uint64_t sleep_time);
 #endif
