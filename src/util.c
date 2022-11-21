@@ -6,10 +6,11 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/15 10:31:05 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/18 19:32:58 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/21 14:55:08 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <unistd.h>
 #include <stdio.h>
 
 #include "../include/philosophers.h"
@@ -45,37 +46,65 @@ int	ft_atoi(const char *str)
 
 // 밑의 두 함수 제대로 작성한거 맞나?
 	// 제대로 작성하였다면, 이 두 함수를 합칠 수 있을까? 그럴 이유와 장단점은 있는가?
-uint64_t	ft_set_start_time(t_philo *philo)
+uint64_t	ft_set_now_ms(void)
 {
-	if (gettimeofday(&(philo -> time_value), 0) != 0)
+	struct timeval	time_value;
+
+	if (gettimeofday(&(time_value), 0) != 0)
 		return (-1);
-	return (philo -> time_value.tv_sec * 1000 + philo -> time_value.tv_usec / 1000);
+	return (time_value.tv_sec * 1000 + time_value.tv_usec / 1000);
 }
 
 uint64_t	ft_set_timestamp(t_philo *philo)
 {
-	if (gettimeofday(&(philo -> time_value), 0) != 0)
+	uint64_t	time;
+
+	time = ft_set_now_ms();
+	if (time == -1)
 		return (-1);
-	return ((philo -> time_value.tv_sec * 1000 + philo -> time_value.tv_usec / 1000)
-		- (philo -> start_time));
+	return (time - (philo -> surveil -> start_time));
 }
 
 uint64_t	ft_set_time_after_last_eat(t_philo *philo)
 {
-	if (gettimeofday(&(philo -> time_value), 0) != 0)
+	uint64_t	time;
+
+	time = ft_set_now_ms();
+	if (time == -1)
 		return (-1);
-	return (((philo -> time_value.tv_sec * 1000 + philo -> time_value.tv_usec / 1000)
-		- philo -> start_time) - (philo -> last_eat_time));
+	return ((time
+			- philo -> surveil -> start_time) - (philo -> last_eat_time));
 }
 
-void	ft_print_with_mutex(t_philo *philo, t_sveil *surveil, char *str)
+// error 예외처리 필요
+int	ft_print_with_mutex(t_philo *philo, t_sveil *surveil, char *str)
 {
 	if (surveil -> stop != 1)
 	{
 		pthread_mutex_lock(surveil -> print);
-		printf("%lu %d %s\n", ft_set_timestamp(philo), philo -> number, str);
+		printf("%llu %d %s\n", ft_set_timestamp(philo), philo -> number, str);
 		pthread_mutex_unlock(surveil -> print);
-		return ;
+		return (0);
 	}
-	return ;
+	return (1);
+}
+
+int	ft_usleep(uint64_t sleep_time)
+{
+	uint64_t	target_time;
+	uint64_t	now_time;
+	int			ret;
+
+	target_time = ft_set_now_ms() + (sleep_time / 1000);
+	while (1)
+	{
+		now_time = ft_set_now_ms();
+		if (target_time <= now_time)
+			return (0);
+		sleep_time = (target_time - now_time) * (1000 / 2);
+		ret = usleep(sleep_time);
+		if (ret != 0)
+			return (ret);
+	}
+	return (0);
 }
