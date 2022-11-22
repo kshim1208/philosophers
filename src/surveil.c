@@ -6,7 +6,7 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/22 10:13:09 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/22 12:53:07 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/22 13:29:23 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ int	ft_surveil_end(t_philo *philo_arr, t_sveil *surveil)
 {
 	int			i;
 
+	//napkin
 	while (1)
 	{
 		i = 0;
