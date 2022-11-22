@@ -6,7 +6,7 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/15 07:53:02 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/22 18:23:06 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/22 18:28:31 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,8 +74,6 @@ int	ft_philo_routine(t_philo *philo)
 
 	surveil = philo -> surveil;
 	ret = 1;
-	if (philo -> number % 2 == 0)
-		ft_usleep((surveil -> time_to_eat * 1000 / 5));
 	while (1)
 	{
 		if (ft_philo_eat(philo, surveil) != 0)
@@ -83,14 +81,13 @@ int	ft_philo_routine(t_philo *philo)
 		if (ft_philo_end_or_wait(philo, surveil) != 0)
 			break ;
 		pthread_mutex_lock(surveil -> done);
-		philo -> mutex_lock_check[E_DONE] = 1;
 		if (surveil -> stop == 1)
 		{
+			pthread_mutex_unlock(surveil -> done);
 			ret = 0;
 			break ;
 		}
 		pthread_mutex_unlock(surveil -> done);
-		philo -> mutex_lock_check[E_DONE] = 0;
 	}
 	ft_philo_mutex_unlock(philo, surveil);
 	return (ret);
