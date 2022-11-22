@@ -6,7 +6,7 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/14 16:56:00 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/22 09:38:05 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/22 12:23:09 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,13 @@ typedef enum e_odd_even_last{
 	E_EVEN,
 	E_LAST
 }			t_eat_type;
+
+typedef enum e_mutex_lock_check{
+	E_FIRST_FORK,
+	E_SECOND_FORK,
+	E_PRINT,
+	E_DONE
+}			t_mtx_lock_philo;
 
 typedef struct s_surveil{
 	int				philo_num;
@@ -46,6 +53,7 @@ typedef struct s_philosopher{
 	pthread_mutex_t	*last_eat;
 	pthread_mutex_t	*first_fork;
 	pthread_mutex_t	*second_fork;
+	int				mutex_lock_check[5];
 	t_sveil			*surveil;
 }			t_philo;
 
@@ -70,7 +78,7 @@ int			ft_phiosophers_start(t_prg *prg,
 int			ft_philo_routine_only_one(t_philo *philo);
 int			ft_philo_routine(t_philo *philo);
 int			ft_philo_eat(t_philo *philo, t_sveil *surveil);
-int			ft_surveil_end(t_philo *philo_arr, t_sveil *surveil);
+void		ft_philo_mutex_unlock(t_philo *philo, t_sveil *surveil);
 int			ft_finish_philosophers(t_prg *prg);
 
 int			ft_atoi(const char *str);
@@ -79,4 +87,7 @@ uint64_t	ft_set_timestamp(t_philo *philo);
 uint64_t	ft_set_time_after_last_eat(t_philo *philo);
 int			ft_print_with_mutex(t_philo *philo, t_sveil *surveil, char *str);
 int			ft_usleep(uint64_t sleep_time);
+
+int			ft_surveil_end(t_philo *philo_arr, t_sveil *surveil);
+
 #endif

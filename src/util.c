@@ -6,7 +6,7 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/15 10:31:05 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/21 14:55:08 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/22 12:28:30 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,7 @@ uint64_t	ft_set_now_ms(void)
 {
 	struct timeval	time_value;
 
-	if (gettimeofday(&(time_value), 0) != 0)
-		return (-1);
+	gettimeofday(&(time_value), 0);
 	return (time_value.tv_sec * 1000 + time_value.tv_usec / 1000);
 }
 
@@ -60,8 +59,6 @@ uint64_t	ft_set_timestamp(t_philo *philo)
 	uint64_t	time;
 
 	time = ft_set_now_ms();
-	if (time == -1)
-		return (-1);
 	return (time - (philo -> surveil -> start_time));
 }
 
@@ -70,30 +67,39 @@ uint64_t	ft_set_time_after_last_eat(t_philo *philo)
 	uint64_t	time;
 
 	time = ft_set_now_ms();
-	if (time == -1)
-		return (-1);
 	return ((time
 			- philo -> surveil -> start_time) - (philo -> last_eat_time));
 }
 
-// error 예외처리 필요
 int	ft_print_with_mutex(t_philo *philo, t_sveil *surveil, char *str)
 {
+	pthread_mutex_lock(surveil -> done);
+	philo -> mutex_lock_check[E_DONE] = 1;
 	if (surveil -> stop != 1)
 	{
 		pthread_mutex_lock(surveil -> print);
-		printf("%llu %d %s\n", ft_set_timestamp(philo), philo -> number, str);
+		philo -> mutex_lock_check[E_PRINT] = 1;
+		if (printf("%llu %d %s\n",
+				ft_set_timestamp(philo), philo -> number, str) == -1)
+			return (1);
 		pthread_mutex_unlock(surveil -> print);
-		return (0);
+		philo -> mutex_lock_check[E_PRINT] = 0;
 	}
-	return (1);
+	if (surveil -> stop == 1)
+	{
+		pthread_mutex_unlock(surveil -> done);
+		philo -> mutex_lock_check[E_DONE] = 0;
+		return (1);
+	}
+	pthread_mutex_unlock(surveil -> done);
+	philo -> mutex_lock_check[E_DONE] = 0;
+	return (0);
 }
 
 int	ft_usleep(uint64_t sleep_time)
 {
 	uint64_t	target_time;
 	uint64_t	now_time;
-	int			ret;
 
 	target_time = ft_set_now_ms() + (sleep_time / 1000);
 	while (1)
@@ -102,9 +108,9 @@ int	ft_usleep(uint64_t sleep_time)
 		if (target_time <= now_time)
 			return (0);
 		sleep_time = (target_time - now_time) * (1000 / 2);
-		ret = usleep(sleep_time);
-		if (ret != 0)
-			return (ret);
+		if (sleep_time < 1)
+			sleep_time = 1;
+		usleep(sleep_time);
 	}
 	return (0);
 }
