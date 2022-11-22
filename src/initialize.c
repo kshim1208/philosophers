@@ -6,7 +6,7 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/15 07:36:01 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/22 09:38:19 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/22 16:54:20 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,8 @@ int	ft_init_mutex_and_philo(t_prg *prg, t_sveil *surveil)
 		= (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t));
 	surveil -> done
 		= (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t));
+	surveil -> napkin_arr = (pthread_mutex_t *)malloc(
+			sizeof(pthread_mutex_t) * surveil -> philo_num);
 	prg -> last_eat_arr = (pthread_mutex_t *)malloc(
 			sizeof(pthread_mutex_t) * surveil -> philo_num);
 	prg -> fork_arr = (pthread_mutex_t *)malloc(
@@ -53,11 +55,13 @@ int	ft_init_mutex_and_philo(t_prg *prg, t_sveil *surveil)
 	prg -> philo_arr
 		= (t_philo *)malloc(sizeof(t_philo) * surveil -> philo_num);
 	if (surveil -> print == 0 || surveil -> done == 0
+		|| surveil -> napkin_arr == 0
 		|| prg -> last_eat_arr == 0 || prg -> fork_arr == 0
 		|| prg -> philo_arr == 0 || pthread_mutex_init(surveil -> print, 0) != 0
 		|| pthread_mutex_init(surveil -> done, 0) != 0
 		|| ft_set_mutex_num(prg -> last_eat_arr, surveil -> philo_num) != 0
-		|| ft_set_mutex_num(prg -> fork_arr, surveil -> philo_num) != 0)
+		|| ft_set_mutex_num(prg -> fork_arr, surveil -> philo_num) != 0
+		|| ft_set_mutex_num(surveil -> napkin_arr, surveil -> philo_num) != 0)
 		return (1);
 	memset(prg -> philo_arr, 0, sizeof(t_philo) * surveil -> philo_num);
 	if (surveil -> philo_num == 1)
@@ -89,6 +93,7 @@ void	ft_set_philo_only_one(t_philo *philo_arr, pthread_mutex_t *last_eat_arr,
 	philo_arr[0].number = 1;
 	philo_arr[0].first_fork = &(fork_arr[0]);
 	philo_arr[0].second_fork = 0;
+	philo_arr[0].napkin = &(surveil -> napkin_arr[0]);
 	philo_arr[0].surveil = surveil;
 	philo_arr[0].last_eat = &(last_eat_arr[0]);
 	return ;
@@ -117,6 +122,7 @@ void	ft_set_philo(t_philo *philo_arr, pthread_mutex_t *last_eat_arr,
 				philo_arr[i].first_fork = &(fork_arr[0]);
 			philo_arr[i].second_fork = &(fork_arr[i]);
 		}
+		philo_arr[i].napkin = &(surveil -> napkin_arr[i]);
 		philo_arr[i].surveil = surveil;
 		philo_arr[i].last_eat = &(last_eat_arr[i]);
 		i++;
