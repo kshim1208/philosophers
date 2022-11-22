@@ -6,7 +6,7 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/22 16:57:16 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/22 17:44:38 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/22 18:23:04 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,13 +25,11 @@ void	ft_philo_mutex_unlock(t_philo *philo, t_sveil *surveil)
 		pthread_mutex_unlock(surveil -> print);
 	if (philo -> mutex_lock_check[E_DONE] == 1)
 		pthread_mutex_unlock(surveil -> done);
+	if (philo -> mutex_lock_check[E_NAPKIN] == 1)
+		pthread_mutex_unlock(philo -> napkin);
 	return ;
 }
 
-// pthread 해제, mutex 해제, prg 디렉토리 해제 함수를 분리 
-	// intilize 단계에서 실패했을 때도 일부 사용할 수 있도록
-
-	// 1개만 있을 때 join or detach 필요함
 int	ft_finish_philosophers(t_prg *prg)
 {
 	int	i;
@@ -44,35 +42,53 @@ int	ft_finish_philosophers(t_prg *prg)
 		i++;
 	}
 	pthread_mutex_unlock(prg -> surveil -> print);
-	i = 0;
-	while (i < prg -> surveil -> philo_num)
-	{
-		pthread_mutex_destroy(&(prg -> fork_arr[i]));
-		pthread_mutex_destroy(&(prg -> last_eat_arr[i]));
-		pthread_mutex_destroy(&(prg -> surveil -> napkin_arr[i]));
-		i++;
-	}
-	if (prg -> fork_arr != 0)
-		free(prg -> fork_arr);
-	if (prg -> last_eat_arr != 0)
-		free(prg -> last_eat_arr);
-	if (prg -> surveil -> napkin_arr != 0)
-		free(prg -> surveil -> napkin_arr);
-	if (prg -> surveil != 0)
-	{
-		if (prg -> surveil -> print != 0)
-		{
-			pthread_mutex_destroy(prg -> surveil -> print);
-			free(prg -> surveil -> print);
-		}
-		if (prg -> surveil -> done != 0)
-		{
-			pthread_mutex_destroy(prg -> surveil -> done);
-			free(prg -> surveil -> done);
-		}
-		free(prg -> surveil);
-	}
+	ft_finish_clear_mutex(prg -> fork_arr, prg -> last_eat_arr,
+		prg -> surveil -> napkin_arr, prg -> surveil -> philo_num);
+	ft_finish_clear_surveil(prg -> surveil);
 	if (prg -> philo_arr != 0)
 		free(prg -> philo_arr);
 	return (0);
+}
+
+void	ft_finish_clear_mutex(pthread_mutex_t *fork_arr,
+			pthread_mutex_t *last_eat_arr,
+			pthread_mutex_t *napkin_arr, int philo_num)
+{
+	int	i;
+
+	i = 0;
+	i = 0;
+	while (i < philo_num)
+	{
+		pthread_mutex_destroy(&(fork_arr[i]));
+		pthread_mutex_destroy(&(last_eat_arr[i]));
+		pthread_mutex_destroy(&(napkin_arr[i]));
+		i++;
+	}
+	if (fork_arr != 0)
+		free(fork_arr);
+	if (last_eat_arr != 0)
+		free(last_eat_arr);
+	if (napkin_arr != 0)
+		free(napkin_arr);
+	return ;
+}
+
+void	ft_finish_clear_surveil(t_sveil *surveil)
+{
+	if (surveil != 0)
+	{
+		if (surveil -> print != 0)
+		{
+			pthread_mutex_destroy(surveil -> print);
+			free(surveil -> print);
+		}
+		if (surveil -> done != 0)
+		{
+			pthread_mutex_destroy(surveil -> done);
+			free(surveil -> done);
+		}
+		free(surveil);
+	}
+	return ;
 }

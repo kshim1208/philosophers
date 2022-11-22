@@ -6,7 +6,7 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/14 16:56:00 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/22 16:42:48 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/22 18:21:58 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,8 @@ typedef enum e_mutex_lock_check{
 	E_FIRST_FORK,
 	E_SECOND_FORK,
 	E_PRINT,
-	E_DONE
+	E_DONE,
+	E_NAPKIN
 }			t_mtx_lock_philo;
 
 typedef struct s_surveil{
@@ -56,7 +57,7 @@ typedef struct s_philosopher{
 	pthread_mutex_t	*first_fork;
 	pthread_mutex_t	*second_fork;
 	pthread_mutex_t	*napkin;
-	int				mutex_lock_check[4];
+	int				mutex_lock_check[5];
 	t_sveil			*surveil;
 }			t_philo;
 
@@ -83,14 +84,20 @@ int			ft_philo_routine(t_philo *philo);
 int			ft_philo_eat(t_philo *philo, t_sveil *surveil);
 int			ft_philo_end_or_wait(t_philo *philo, t_sveil *surveil);
 void		ft_philo_mutex_unlock(t_philo *philo, t_sveil *surveil);
+
 int			ft_finish_philosophers(t_prg *prg);
+void		ft_finish_clear_mutex(pthread_mutex_t *fork_arr,
+				pthread_mutex_t *last_eat_arr,
+				pthread_mutex_t *napkin_arr, int philo_num);
+void		ft_finish_clear_surveil(t_sveil *surveil);
 
 int			ft_atoi(const char *str);
+int			ft_print_with_mutex(t_philo *philo, t_sveil *surveil, char *str);
+int			ft_usleep(uint64_t sleep_time);
+
 uint64_t	ft_set_now_ms(void);
 uint64_t	ft_set_timestamp(t_philo *philo);
 uint64_t	ft_set_time_after_last_eat(t_philo *philo);
-int			ft_print_with_mutex(t_philo *philo, t_sveil *surveil, char *str);
-int			ft_usleep(uint64_t sleep_time);
 
 int			ft_surveil_end(t_philo *philo_arr, t_sveil *surveil);
 int			ft_surveil_end_last_eat(t_philo *philo_arr, t_sveil *surveil);

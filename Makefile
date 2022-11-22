@@ -8,30 +8,15 @@ RMFLAGS = -f
 
 HEADERS = -I$(INCLUDE)
 
-BONUS_HEADERS = -I$(BONUS_INCLUDES)
-
 INCLUDE = ./include
-
-BONUS_INCLUDES = ./include_bonus
 
 SRCDIR = ./src
 
-BONUS_SRCDIR = ./src_bonus
+SRC_FILES	= main.c initialize.c philosophers.c philosophers_end.c surveil_eat.c surveil_end.c time.c util.c
 
-
-BONUS_SRC_FILES	= main_bonus.c initialize_bonus.c philosophers_bonus.c util_bonus.c
-BONUS_SRC_FILES	:= $(addprefix $(BONUS_SRCDIR)/, $(BONUS_SRC_FILES))
-
-BONUS_SRCS = $(BONUS_SRC_FILES)
-
-
-SRC_FILES	= main.c initialize.c philosophers.c philosophers_end.c surveil_eat.c surveil_end.c util.c
 SRC_FILES	:= $(addprefix $(SRCDIR)/, $(SRC_FILES))
 
 SRCS = $(SRC_FILES)
-
-
-BONUS_OBJS = $(BONUS_SRCS:.c=.o)
 
 OBJS = $(SRCS:.c=.o)
 

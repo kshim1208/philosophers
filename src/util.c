@@ -6,7 +6,7 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/15 10:31:05 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/22 16:54:14 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/22 18:08:58 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,33 +42,6 @@ int	ft_atoi(const char *str)
 		}
 	}
 	return ((int)(ret * sign));
-}
-
-// 밑의 두 함수 제대로 작성한거 맞나?
-	// 제대로 작성하였다면, 이 두 함수를 합칠 수 있을까? 그럴 이유와 장단점은 있는가?
-uint64_t	ft_set_now_ms(void)
-{
-	struct timeval	time_value;
-
-	gettimeofday(&(time_value), 0);
-	return (time_value.tv_sec * 1000 + time_value.tv_usec / 1000);
-}
-
-uint64_t	ft_set_timestamp(t_philo *philo)
-{
-	uint64_t	time;
-
-	time = ft_set_now_ms();
-	return (time - (philo -> surveil -> start_time));
-}
-
-uint64_t	ft_set_time_after_last_eat(t_philo *philo)
-{
-	uint64_t	time;
-
-	time = ft_set_now_ms();
-	return ((time
-			- philo -> surveil -> start_time) - (philo -> last_eat_time));
 }
 
 int	ft_print_with_mutex(t_philo *philo, t_sveil *surveil, char *str)
@@ -108,8 +81,8 @@ int	ft_usleep(uint64_t sleep_time)
 		if (target_time <= now_time)
 			return (0);
 		sleep_time = (target_time - now_time) * (1000 / 2);
-		if (sleep_time < 1)
-			sleep_time = 1;
+		if (sleep_time < 10)
+			sleep_time = 10;
 		usleep(sleep_time);
 	}
 	return (0);

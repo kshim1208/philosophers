@@ -6,7 +6,7 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/15 07:53:02 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/22 17:23:24 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/22 18:23:06 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,8 @@ int	ft_philo_routine(t_philo *philo)
 
 	surveil = philo -> surveil;
 	ret = 1;
+	if (philo -> number % 2 == 0)
+		ft_usleep((surveil -> time_to_eat * 1000 / 5));
 	while (1)
 	{
 		if (ft_philo_eat(philo, surveil) != 0)
@@ -85,8 +87,6 @@ int	ft_philo_routine(t_philo *philo)
 		if (surveil -> stop == 1)
 		{
 			ret = 0;
-			pthread_mutex_unlock(surveil -> done);
-			philo -> mutex_lock_check[E_DONE] = 0;
 			break ;
 		}
 		pthread_mutex_unlock(surveil -> done);
@@ -99,6 +99,7 @@ int	ft_philo_routine(t_philo *philo)
 int	ft_philo_eat(t_philo *philo, t_sveil *surveil)
 {
 	pthread_mutex_lock(philo -> napkin);
+	philo -> mutex_lock_check[E_NAPKIN] = 1;
 	pthread_mutex_lock(philo -> first_fork);
 	philo -> mutex_lock_check[E_FIRST_FORK] = 1;
 	if (ft_print_with_mutex(philo, surveil, "has taken a fork") != 0)
@@ -118,6 +119,7 @@ int	ft_philo_eat(t_philo *philo, t_sveil *surveil)
 	philo -> mutex_lock_check[E_FIRST_FORK] = 0;
 	philo -> number_of_eat++;
 	pthread_mutex_unlock(philo -> napkin);
+	philo -> mutex_lock_check[E_NAPKIN] = 0;
 	return (0);
 }
 
@@ -129,13 +131,10 @@ int	ft_philo_end_or_wait(t_philo *philo, t_sveil *surveil)
 		surveil -> philo_done_eat++;
 		pthread_mutex_unlock(surveil -> done);
 	}
-	else
-	{
-		if (ft_print_with_mutex(philo, surveil, "is sleeping") != 0)
-			return (1);
-		ft_usleep(surveil -> time_to_sleep * 1000);
-		if (ft_print_with_mutex(philo, surveil, "is thinking") != 0)
-			return (1);
-	}
+	if (ft_print_with_mutex(philo, surveil, "is sleeping") != 0)
+		return (1);
+	ft_usleep(surveil -> time_to_sleep * 1000);
+	if (ft_print_with_mutex(philo, surveil, "is thinking") != 0)
+		return (1);
 	return (0);
 }
