@@ -6,7 +6,7 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/15 07:53:02 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/22 12:48:51 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/22 12:53:03 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,22 +73,8 @@ int	ft_philo_routine(t_philo *philo)
 	{
 		if (ft_philo_eat(philo, surveil) != 0)
 			break ;
-		if (philo -> number_of_eat == surveil -> number_to_eat)
-		{
-			pthread_mutex_lock(surveil -> done);
-			surveil -> philo_done_eat++;
-			pthread_mutex_unlock(surveil -> done);
-			ret = 0;
+		if (ft_philo_end_or_wait(philo, surveil) != 0)
 			break ;
-		}
-		else
-		{
-			if (ft_print_with_mutex(philo, surveil, "is sleeping") != 0)
-				break ;
-			ft_usleep(surveil -> time_to_sleep * 1000);
-			if (ft_print_with_mutex(philo, surveil, "is thinking") != 0)
-				break ;
-		}
 		pthread_mutex_lock(surveil -> done);
 		philo -> mutex_lock_check[E_DONE] = 1;
 		if (surveil -> stop == 1)
@@ -123,6 +109,25 @@ int	ft_philo_eat(t_philo *philo, t_sveil *surveil)
 	pthread_mutex_unlock(philo -> first_fork);
 	philo -> mutex_lock_check[E_FIRST_FORK] = 0;
 	philo -> number_of_eat++;
+	return (0);
+}
+
+int	ft_philo_end_or_wait(t_philo *philo, t_sveil *surveil)
+{
+	if (philo -> number_of_eat == surveil -> number_to_eat)
+	{
+		pthread_mutex_lock(surveil -> done);
+		surveil -> philo_done_eat++;
+		pthread_mutex_unlock(surveil -> done);
+	}
+	else
+	{
+		if (ft_print_with_mutex(philo, surveil, "is sleeping") != 0)
+			return (1);
+		ft_usleep(surveil -> time_to_sleep * 1000);
+		if (ft_print_with_mutex(philo, surveil, "is thinking") != 0)
+			return (1);
+	}
 	return (0);
 }
 
