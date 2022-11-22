@@ -6,7 +6,7 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/14 16:56:00 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/21 22:53:36 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/22 09:38:05 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ typedef struct s_surveil{
 	int				number_to_eat;
 	int				philo_done_eat;
 	pthread_mutex_t	*print;
-	pthread_mutex_t	*done_eat;
+	pthread_mutex_t	*done;
 	uint64_t		start_time;
 	pthread_t		surveil_eat;
 }			t_sveil;
