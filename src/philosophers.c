@@ -6,7 +6,7 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/15 07:53:02 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/22 15:03:51 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/22 16:48:00 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,8 +69,6 @@ int	ft_philo_routine(t_philo *philo)
 
 	surveil = philo -> surveil;
 	ret = 1;
-	if (philo -> number % 2 == 0)
-		ft_usleep((surveil -> time_to_eat / 10.0) * 1000.0);
 	while (1)
 	{
 		if (ft_philo_eat(philo, surveil) != 0)
@@ -156,6 +154,7 @@ int	ft_finish_philosophers(t_prg *prg)
 	int	i;
 
 	i = 0;
+	pthread_join(prg -> surveil -> surveil_eat, 0);
 	while (i < prg -> surveil -> philo_num)
 	{
 		pthread_join(prg -> philo_arr[i].tid, 0);
