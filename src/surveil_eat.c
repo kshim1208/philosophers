@@ -6,7 +6,7 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/22 16:41:56 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/22 16:54:11 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/22 17:21:25 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,13 @@ int	ft_surveil_eat(t_prg *prg)
 	t_philo	*philo_arr;
 	t_sveil	*surveil;
 	int		type;
-	int		half;
 	int		i;
 
 	philo_arr = prg -> philo_arr;
 	surveil = prg -> surveil;
 	type = E_ODD;
-	half = (surveil -> philo_num) / 2;
+	if (surveil -> philo_num == 1)
+		type = E_LAST;
 	i = 0;
 	while (i < surveil -> philo_num)
 	{
