@@ -6,7 +6,7 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/22 10:13:09 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/22 15:12:20 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/22 15:23:05 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,7 @@ int	ft_surveil_eat(t_prg *prg)
 				pthread_mutex_unlock(philo_arr[i + type].napkin);
 				i = i + 2;
 			}
+			// '절반' 저장해두고 잘 먹었나 체크까지.
 			ft_usleep(surveil -> time_to_eat * 1000);
 			i = 0;
 			while (i < surveil -> philo_num)
