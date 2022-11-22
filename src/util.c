@@ -6,7 +6,7 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/15 10:31:05 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/22 18:08:58 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/22 18:44:38 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,26 +46,25 @@ int	ft_atoi(const char *str)
 
 int	ft_print_with_mutex(t_philo *philo, t_sveil *surveil, char *str)
 {
-	pthread_mutex_lock(surveil -> done);
-	philo -> mutex_lock_check[E_DONE] = 1;
-	if (surveil -> stop != 1)
+	pthread_mutex_lock(surveil->done);
+	if (surveil->stop != 1)
 	{
-		pthread_mutex_lock(surveil -> print);
-		philo -> mutex_lock_check[E_PRINT] = 1;
+		pthread_mutex_lock(surveil->print);
 		if (printf("%llu %d %s\n",
-				ft_set_timestamp(philo), philo -> number, str) == -1)
+				ft_set_timestamp(philo), philo->number, str) == -1)
+		{
+			pthread_mutex_unlock(surveil->done);
+			pthread_mutex_unlock(surveil->print);
 			return (1);
-		pthread_mutex_unlock(surveil -> print);
-		philo -> mutex_lock_check[E_PRINT] = 0;
+		}
+		pthread_mutex_unlock(surveil->print);
 	}
-	if (surveil -> stop == 1)
+	if (surveil->stop == 1)
 	{
-		pthread_mutex_unlock(surveil -> done);
-		philo -> mutex_lock_check[E_DONE] = 0;
-		return (1);
+		pthread_mutex_unlock(surveil->done);
+		return (0);
 	}
-	pthread_mutex_unlock(surveil -> done);
-	philo -> mutex_lock_check[E_DONE] = 0;
+	pthread_mutex_unlock(surveil->done);
 	return (0);
 }
 

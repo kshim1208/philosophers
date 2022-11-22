@@ -6,7 +6,7 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/22 17:58:15 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/22 17:58:37 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/22 18:39:33 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ uint64_t	ft_set_timestamp(t_philo *philo)
 	uint64_t	time;
 
 	time = ft_set_now_ms();
-	return (time - (philo -> surveil -> start_time));
+	return (time - (philo->surveil->start_time));
 }
 
 uint64_t	ft_set_time_after_last_eat(t_philo *philo)
@@ -34,5 +34,5 @@ uint64_t	ft_set_time_after_last_eat(t_philo *philo)
 
 	time = ft_set_now_ms();
 	return ((time
-			- philo -> surveil -> start_time) - (philo -> last_eat_time));
+			- philo->surveil->start_time) - (philo->last_eat_time));
 }

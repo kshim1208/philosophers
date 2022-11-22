@@ -6,7 +6,7 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/22 16:57:16 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/22 18:23:04 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/22 18:43:36 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,38 +15,23 @@
 
 #include "../include/philosophers.h"
 
-void	ft_philo_mutex_unlock(t_philo *philo, t_sveil *surveil)
-{
-	if (philo -> mutex_lock_check[E_FIRST_FORK] == 1)
-		pthread_mutex_unlock(philo -> first_fork);
-	if (philo -> mutex_lock_check[E_SECOND_FORK] == 1)
-		pthread_mutex_unlock(philo -> second_fork);
-	if (philo -> mutex_lock_check[E_PRINT] == 1)
-		pthread_mutex_unlock(surveil -> print);
-	if (philo -> mutex_lock_check[E_DONE] == 1)
-		pthread_mutex_unlock(surveil -> done);
-	if (philo -> mutex_lock_check[E_NAPKIN] == 1)
-		pthread_mutex_unlock(philo -> napkin);
-	return ;
-}
-
 int	ft_finish_philosophers(t_prg *prg)
 {
 	int	i;
 
 	i = 0;
-	pthread_join(prg -> surveil -> surveil_eat, 0);
-	while (i < prg -> surveil -> philo_num)
+	pthread_join(prg->surveil->surveil_eat, 0);
+	while (i < prg->surveil->philo_num)
 	{
-		pthread_join(prg -> philo_arr[i].tid, 0);
+		pthread_join(prg->philo_arr[i].tid, 0);
 		i++;
 	}
-	pthread_mutex_unlock(prg -> surveil -> print);
-	ft_finish_clear_mutex(prg -> fork_arr, prg -> last_eat_arr,
-		prg -> surveil -> napkin_arr, prg -> surveil -> philo_num);
-	ft_finish_clear_surveil(prg -> surveil);
-	if (prg -> philo_arr != 0)
-		free(prg -> philo_arr);
+	pthread_mutex_unlock(prg->surveil->print);
+	ft_finish_clear_mutex(prg->fork_arr, prg->last_eat_arr,
+		prg->surveil->napkin_arr, prg->surveil->philo_num);
+	ft_finish_clear_surveil(prg->surveil);
+	if (prg->philo_arr != 0)
+		free(prg->philo_arr);
 	return (0);
 }
 
@@ -78,15 +63,15 @@ void	ft_finish_clear_surveil(t_sveil *surveil)
 {
 	if (surveil != 0)
 	{
-		if (surveil -> print != 0)
+		if (surveil->print != 0)
 		{
-			pthread_mutex_destroy(surveil -> print);
-			free(surveil -> print);
+			pthread_mutex_destroy(surveil->print);
+			free(surveil->print);
 		}
-		if (surveil -> done != 0)
+		if (surveil->done != 0)
 		{
-			pthread_mutex_destroy(surveil -> done);
-			free(surveil -> done);
+			pthread_mutex_destroy(surveil->done);
+			free(surveil->done);
 		}
 		free(surveil);
 	}

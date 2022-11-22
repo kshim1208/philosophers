@@ -6,7 +6,7 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/14 16:56:00 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/22 18:21:58 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/22 18:43:48 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,6 @@ typedef struct s_philosopher{
 	pthread_mutex_t	*first_fork;
 	pthread_mutex_t	*second_fork;
 	pthread_mutex_t	*napkin;
-	int				mutex_lock_check[5];
 	t_sveil			*surveil;
 }			t_philo;
 
@@ -83,7 +82,6 @@ int			ft_philo_routine_only_one(t_philo *philo);
 int			ft_philo_routine(t_philo *philo);
 int			ft_philo_eat(t_philo *philo, t_sveil *surveil);
 int			ft_philo_end_or_wait(t_philo *philo, t_sveil *surveil);
-void		ft_philo_mutex_unlock(t_philo *philo, t_sveil *surveil);
 
 int			ft_finish_philosophers(t_prg *prg);
 void		ft_finish_clear_mutex(pthread_mutex_t *fork_arr,
