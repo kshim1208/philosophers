@@ -6,7 +6,7 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/15 07:53:02 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/22 12:53:03 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/22 15:03:51 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ int	ft_phiosophers_start(t_prg *prg, t_philo *philo_arr, t_sveil *surveil)
 
 	i = 0;
 	surveil -> start_time = ft_set_now_ms();
+	pthread_create(&(surveil -> surveil_eat), 0,
+		(void *)ft_surveil_eat, (void *)prg);
 	if (surveil -> philo_num == 1)
 		pthread_create(&(philo_arr[0].tid), 0,
 			(void *)ft_philo_routine_only_one, (void *)&(philo_arr[0]));
@@ -91,6 +93,7 @@ int	ft_philo_routine(t_philo *philo)
 
 int	ft_philo_eat(t_philo *philo, t_sveil *surveil)
 {
+	pthread_mutex_lock(philo -> napkin);
 	pthread_mutex_lock(philo -> first_fork);
 	philo -> mutex_lock_check[E_FIRST_FORK] = 1;
 	if (ft_print_with_mutex(philo, surveil, "has taken a fork") != 0)
@@ -109,6 +112,7 @@ int	ft_philo_eat(t_philo *philo, t_sveil *surveil)
 	pthread_mutex_unlock(philo -> first_fork);
 	philo -> mutex_lock_check[E_FIRST_FORK] = 0;
 	philo -> number_of_eat++;
+	pthread_mutex_unlock(philo -> napkin);
 	return (0);
 }
 

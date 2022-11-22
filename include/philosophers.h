@@ -6,7 +6,7 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/14 16:56:00 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/22 13:22:35 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/22 13:50:40 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ typedef struct s_surveil{
 	pthread_mutex_t	*done;
 	uint64_t		start_time;
 	pthread_t		surveil_eat;
+	pthread_mutex_t	*napkin_arr;
 }			t_sveil;
 
 typedef struct s_philosopher{
@@ -53,6 +54,7 @@ typedef struct s_philosopher{
 	pthread_mutex_t	*last_eat;
 	pthread_mutex_t	*first_fork;
 	pthread_mutex_t	*second_fork;
+	pthread_mutex_t	*napkin;
 	int				mutex_lock_check[5];
 	t_sveil			*surveil;
 }			t_philo;
@@ -90,5 +92,6 @@ int			ft_print_with_mutex(t_philo *philo, t_sveil *surveil, char *str);
 int			ft_usleep(uint64_t sleep_time);
 
 int			ft_surveil_end(t_philo *philo_arr, t_sveil *surveil);
+int			ft_surveil_eat(t_prg *prg);
 
 #endif
