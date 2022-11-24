@@ -6,14 +6,14 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/15 10:31:05 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/22 18:44:38 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/24 09:05:26 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <unistd.h>
 #include <stdio.h>
 
-#include "../include/philosophers.h"
+#include "./philosophers.h"
 
 int	ft_atoi(const char *str)
 {

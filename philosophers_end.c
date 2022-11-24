@@ -6,21 +6,21 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/22 16:57:16 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/22 18:43:36 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/24 09:05:02 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <unistd.h>
 #include <stdlib.h>
 
-#include "../include/philosophers.h"
+#include "./philosophers.h"
 
 int	ft_finish_philosophers(t_prg *prg)
 {
 	int	i;
 
 	i = 0;
-	pthread_join(prg->surveil->surveil_eat, 0);
+	pthread_join(prg->surveil->surveil_end, 0);
 	while (i < prg->surveil->philo_num)
 	{
 		pthread_join(prg->philo_arr[i].tid, 0);

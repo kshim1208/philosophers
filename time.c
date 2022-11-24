@@ -6,11 +6,13 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/22 17:58:15 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/22 18:39:33 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/24 09:05:22 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/philosophers.h"
+#include <sys/time.h>
+
+#include "./philosophers.h"
 
 uint64_t	ft_set_now_ms(void)
 {

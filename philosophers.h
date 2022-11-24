@@ -6,7 +6,7 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/14 16:56:00 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/22 18:43:48 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/24 09:05:33 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,17 @@
 
 # include <pthread.h>
 # include <stdint.h>
-# include <sys/time.h>
 
 typedef enum e_odd_even_last{
 	E_ODD = 0,
 	E_EVEN = 1,
 	E_LAST
 }			t_eat_type;
+
+typedef enum e_lock_unlock_napkin{
+	E_LOCK = 0,
+	E_UNLOCK
+}			t_l_u_lock_napkin;
 
 typedef enum e_mutex_lock_check{
 	E_FIRST_FORK,
@@ -43,7 +47,7 @@ typedef struct s_surveil{
 	pthread_mutex_t	*print;
 	pthread_mutex_t	*done;
 	uint64_t		start_time;
-	pthread_t		surveil_eat;
+	pthread_t		surveil_end;
 	pthread_mutex_t	*napkin_arr;
 }			t_sveil;
 
@@ -97,14 +101,14 @@ uint64_t	ft_set_now_ms(void);
 uint64_t	ft_set_timestamp(t_philo *philo);
 uint64_t	ft_set_time_after_last_eat(t_philo *philo);
 
-int			ft_surveil_end(t_philo *philo_arr, t_sveil *surveil);
+int			ft_surveil_end(t_prg *prg);
 int			ft_surveil_end_last_eat(t_philo *philo_arr, t_sveil *surveil);
 
-int			ft_surveil_eat(t_prg *prg);
+int			ft_surveil_eat(t_philo *philo_arr, t_sveil *surveil);
 int			ft_surveil_eat_even(t_philo *philo_arr, t_sveil *surveil, int type);
 int			ft_surveil_eat_odd(t_philo *philo_arr, t_sveil *surveil, int type);
 void		ft_distribue_ret_napkin(t_philo *philo_arr,
 				t_sveil *surveil, int type, int philo_num);
-void		ft_surveil_eat_end_unlock_napkin(t_sveil *surveil);
+void		ft_surveil_eat_set_napkin(t_sveil *surveil, int set_mode);
 
 #endif

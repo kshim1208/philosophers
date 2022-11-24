@@ -1,4 +1,4 @@
-NAME = philosophers
+NAME = philo
 
 CC = cc
 FLAGS = -Wall -Wextra -Werror
@@ -6,15 +6,7 @@ DEBUG = -g
 RM = rm
 RMFLAGS = -f
 
-HEADERS = -I$(INCLUDE)
-
-INCLUDE = ./include
-
-SRCDIR = ./src
-
 SRC_FILES	= main.c initialize.c philosophers.c philosophers_end.c surveil_eat.c surveil_end.c time.c util.c
-
-SRC_FILES	:= $(addprefix $(SRCDIR)/, $(SRC_FILES))
 
 SRCS = $(SRC_FILES)
 

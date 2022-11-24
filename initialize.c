@@ -6,14 +6,14 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/15 07:36:01 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/22 18:39:45 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/24 09:04:53 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <string.h>
 #include <stdlib.h>
 
-#include "../include/philosophers.h"
+#include "./philosophers.h"
 
 int	ft_init_surveil_argument(int argc, char **argv, t_prg *prg)
 {
