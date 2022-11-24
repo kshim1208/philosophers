@@ -6,7 +6,7 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/22 16:41:47 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/24 16:26:24 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/24 16:57:43 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ int	ft_surveil_end(t_prg *prg)
 			break ;
 		}
 	}
-	// print lock 했다면 lock 풀기 - lock state
 	return (0);
 }
 
@@ -61,6 +60,7 @@ int	ft_surveil_end_last_eat(t_philo *philo_arr, t_sveil *surveil)
 			if (printf("%llu %d died\n", ft_set_timestamp(&(philo_arr[i])),
 					philo_arr[i].number) == -1)
 				return (1);
+			pthread_mutex_unlock(surveil->print);
 			return (0);
 		}
 		pthread_mutex_unlock(philo_arr[i].last_eat);

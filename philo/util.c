@@ -6,7 +6,7 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/15 10:31:05 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/24 16:06:08 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/24 17:05:42 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,34 @@ int	ft_atoi(const char *str)
 	return ((int)(ret * sign));
 }
 
+int	ft_philo_routine_only_one(t_philo *philo)
+{
+	t_sveil	*surveil;
+
+	surveil = philo->surveil;
+	while (1)
+	{
+		pthread_mutex_lock(philo->napkin);
+		pthread_mutex_lock(philo->first_fork);
+		ft_print_with_mutex(philo, surveil, "has taken a fork");
+		if (ft_usleep((surveil->time_to_die * 1000) + 100) != 0)
+		{
+			pthread_mutex_unlock(philo->first_fork);
+			pthread_mutex_unlock(philo->napkin);
+			return (1);
+		}
+		pthread_mutex_unlock(philo->first_fork);
+		pthread_mutex_lock(surveil->done);
+		if (surveil->stop == 1)
+		{
+			pthread_mutex_unlock(surveil->done);
+			pthread_mutex_unlock(philo->napkin);
+			break ;
+		}
+	}
+	return (0);
+}
+
 int	ft_print_with_mutex(t_philo *philo, t_sveil *surveil, char *str)
 {
 	pthread_mutex_lock(surveil->done);
@@ -59,7 +87,7 @@ int	ft_print_with_mutex(t_philo *philo, t_sveil *surveil, char *str)
 		}
 		pthread_mutex_unlock(surveil->print);
 	}
-	if (surveil->stop == 1)
+	else if (surveil->stop == 1)
 	{
 		pthread_mutex_unlock(surveil->done);
 		return (0);

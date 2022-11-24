@@ -6,7 +6,7 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/15 07:53:02 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/24 16:26:50 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/24 17:04:33 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,34 +39,6 @@ int	ft_phiosophers_start(t_prg *prg, t_philo *philo_arr, t_sveil *surveil)
 	}
 	ft_surveil_eat(philo_arr, surveil);
 	ft_finish_philosophers(prg);
-	return (0);
-}
-
-int	ft_philo_routine_only_one(t_philo *philo)
-{
-	t_sveil	*surveil;
-
-	surveil = philo->surveil;
-	while (1)
-	{
-		pthread_mutex_lock(philo->napkin);
-		pthread_mutex_lock(philo->first_fork);
-		ft_print_with_mutex(philo, surveil, "has taken a fork");
-		if (ft_usleep((surveil->time_to_die * 1000) + 100) != 0)
-		{
-			pthread_mutex_unlock(philo->first_fork);
-			pthread_mutex_unlock(philo->napkin);
-			return (1);
-		}
-		pthread_mutex_unlock(philo->first_fork);
-		pthread_mutex_lock(surveil->done);
-		if (surveil->stop == 1)
-		{
-			pthread_mutex_unlock(surveil->done);
-			pthread_mutex_unlock(philo->napkin);
-			break ;
-		}
-	}
 	return (0);
 }
 
@@ -113,6 +85,15 @@ int	ft_philo_eat(t_philo *philo, t_sveil *surveil)
 	philo->last_eat_time = ft_set_timestamp(philo);
 	pthread_mutex_unlock(philo->last_eat);
 	ft_usleep(surveil->time_to_eat * 1000);
+	ft_philo_after_eat(philo, surveil);
+	pthread_mutex_unlock(philo->second_fork);
+	pthread_mutex_unlock(philo->first_fork);
+	pthread_mutex_unlock(philo->napkin);
+	return (0);
+}
+
+int	ft_philo_after_eat(t_philo *philo, t_sveil *surveil)
+{
 	pthread_mutex_lock(surveil->done);
 	philo->number_of_eat++;
 	if (philo->number_of_eat == surveil->number_to_eat)
@@ -122,19 +103,11 @@ int	ft_philo_eat(t_philo *philo, t_sveil *surveil)
 		{
 			surveil->stop = 1;
 			pthread_mutex_unlock(surveil->done);
-			pthread_mutex_lock(surveil->print);
-			if (printf("done to eat") == -1)
-			{
-				return (1);
-			}
 		}
-		else
-			pthread_mutex_unlock(surveil->done);
+		pthread_mutex_unlock(surveil->done);
 	}
-	pthread_mutex_unlock(surveil->done);
-	pthread_mutex_unlock(philo->second_fork);
-	pthread_mutex_unlock(philo->first_fork);
-	pthread_mutex_unlock(philo->napkin);
+	else
+		pthread_mutex_unlock(surveil->done);
 	return (0);
 }
 

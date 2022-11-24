@@ -6,7 +6,7 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/22 16:41:56 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/24 16:20:00 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/24 17:10:57 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ int	ft_surveil_eat_odd(t_philo *philo_arr, t_sveil *surveil, int type)
 		if (surveil->stop != 1)
 		{
 			pthread_mutex_unlock(surveil->done);
+			/*
 			if (type == E_LAST)
 			{
 				pthread_mutex_unlock(
@@ -73,6 +74,9 @@ int	ft_surveil_eat_odd(t_philo *philo_arr, t_sveil *surveil, int type)
 			else
 				ft_distribue_ret_napkin(
 					philo_arr, surveil, type, (surveil->philo_num) - 1);
+			*/
+			ft_distribue_ret_napkin(
+				philo_arr, surveil, type, (surveil->philo_num) - 1);
 			if (type == E_LAST)
 				type = E_ODD;
 			else

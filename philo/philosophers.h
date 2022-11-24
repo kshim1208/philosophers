@@ -6,7 +6,7 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/14 16:56:00 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/24 15:56:45 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/24 16:37:36 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,9 +79,9 @@ void		ft_set_philo(t_philo *philo_arr, pthread_mutex_t *last_eat_arr,
 
 int			ft_phiosophers_start(t_prg *prg,
 				t_philo *philo_arr, t_sveil *surveil);
-int			ft_philo_routine_only_one(t_philo *philo);
 int			ft_philo_routine(t_philo *philo);
 int			ft_philo_eat(t_philo *philo, t_sveil *surveil);
+int			ft_philo_after_eat(t_philo *philo, t_sveil *surveil);
 int			ft_philo_end_or_wait(t_philo *philo, t_sveil *surveil);
 
 int			ft_finish_philosophers(t_prg *prg);
@@ -91,6 +91,7 @@ void		ft_finish_clear_mutex(pthread_mutex_t *fork_arr,
 void		ft_finish_clear_surveil(t_sveil *surveil);
 
 int			ft_atoi(const char *str);
+int			ft_philo_routine_only_one(t_philo *philo);
 int			ft_print_with_mutex(t_philo *philo, t_sveil *surveil, char *str);
 int			ft_usleep(uint64_t sleep_time);
 
