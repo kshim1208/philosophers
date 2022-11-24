@@ -6,7 +6,7 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/14 16:56:00 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/24 09:19:12 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/24 15:56:45 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,11 @@ typedef enum e_lock_unlock_napkin{
 	E_UNLOCK
 }			t_l_u_lock_napkin;
 
+typedef enum e_fork_state{
+	E_DROP = 0,
+	E_HOLD
+}			t_fork_state;
+
 typedef struct s_surveil{
 	int				philo_num;
 	int				time_to_eat;
@@ -40,6 +45,7 @@ typedef struct s_surveil{
 	uint64_t		start_time;
 	pthread_t		surveil_end;
 	pthread_mutex_t	*napkin_arr;
+	int				*fork_state;
 }			t_sveil;
 
 typedef struct s_philosopher{
@@ -47,6 +53,7 @@ typedef struct s_philosopher{
 	int				number;
 	uint64_t		last_eat_time;
 	int				number_of_eat;
+	int				fork_state;
 	pthread_mutex_t	*last_eat;
 	pthread_mutex_t	*first_fork;
 	pthread_mutex_t	*second_fork;

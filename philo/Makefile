@@ -1,8 +1,7 @@
 NAME = philo
 
 CC = cc
-FLAGS = -Wall -Wextra -Werror
-DEBUG = -g
+CFLAGS = -Wall -Wextra -Werror
 RM = rm
 RMFLAGS = -f
 
@@ -16,10 +15,10 @@ OBJS = $(SRCS:.c=.o)
 all : $(NAME)
 
 $(NAME): $(OBJS)
-	$(CC) $(CFLAGS) $(DEBUG) $(OBJS) -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
 
 %.o	: %.c
-	$(CC) $(CFLAGS) $(DEBUG) $(HEADERS) -c $< -o $@
+	$(CC) $(CFLAGS) $(HEADERS) -c $< -o $@
 
 	
 clean:

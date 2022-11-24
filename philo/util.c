@@ -6,7 +6,7 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/15 10:31:05 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/24 09:05:26 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/24 16:06:08 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,11 +49,11 @@ int	ft_print_with_mutex(t_philo *philo, t_sveil *surveil, char *str)
 	pthread_mutex_lock(surveil->done);
 	if (surveil->stop != 1)
 	{
+		pthread_mutex_unlock(surveil->done);
 		pthread_mutex_lock(surveil->print);
 		if (printf("%llu %d %s\n",
 				ft_set_timestamp(philo), philo->number, str) == -1)
 		{
-			pthread_mutex_unlock(surveil->done);
 			pthread_mutex_unlock(surveil->print);
 			return (1);
 		}
