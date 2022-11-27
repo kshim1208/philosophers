@@ -6,7 +6,7 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/14 16:56:00 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/24 16:37:36 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/28 08:40:46 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,10 +53,11 @@ typedef struct s_philosopher{
 	int				number;
 	uint64_t		last_eat_time;
 	int				number_of_eat;
-	int				fork_state;
 	pthread_mutex_t	*last_eat;
 	pthread_mutex_t	*first_fork;
+	int				*fst_fork_state;
 	pthread_mutex_t	*second_fork;
+	int				*sec_fork_state;
 	pthread_mutex_t	*napkin;
 	t_sveil			*surveil;
 }			t_philo;
@@ -70,10 +71,8 @@ typedef struct s_program_data{
 
 int			ft_init_surveil_argument(int argc, char **argv, t_prg *prg);
 int			ft_init_mutex_and_philo(t_prg *prg, t_sveil *surveil);
+int			ft_memory_alloc_mutex_and_philo(t_prg *prg, t_sveil *surveil);
 int			ft_set_mutex_num(pthread_mutex_t *mutex_arr, int num);
-void		ft_set_philo_only_one(t_philo *philo_arr,
-				pthread_mutex_t *last_eat_arr,
-				pthread_mutex_t *fork_arr, t_sveil *surveil);
 void		ft_set_philo(t_philo *philo_arr, pthread_mutex_t *last_eat_arr,
 				pthread_mutex_t *fork_arr, t_sveil *surveil);
 
@@ -82,7 +81,7 @@ int			ft_phiosophers_start(t_prg *prg,
 int			ft_philo_routine(t_philo *philo);
 int			ft_philo_eat(t_philo *philo, t_sveil *surveil);
 int			ft_philo_after_eat(t_philo *philo, t_sveil *surveil);
-int			ft_philo_end_or_wait(t_philo *philo, t_sveil *surveil);
+int			ft_philo_sleep_think(t_philo *philo, t_sveil *surveil);
 
 int			ft_finish_philosophers(t_prg *prg);
 void		ft_finish_clear_mutex(pthread_mutex_t *fork_arr,

@@ -6,7 +6,7 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/15 07:36:01 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/24 09:14:06 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/28 08:10:15 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,22 @@ int	ft_init_surveil_argument(int argc, char **argv, t_prg *prg)
 
 int	ft_init_mutex_and_philo(t_prg *prg, t_sveil *surveil)
 {
+	if (ft_memory_alloc_mutex_and_philo(prg, surveil) != 0
+		|| pthread_mutex_init(surveil->print, 0) != 0
+		|| pthread_mutex_init(surveil->done, 0) != 0
+		|| ft_set_mutex_num(prg->last_eat_arr, surveil->philo_num) != 0
+		|| ft_set_mutex_num(prg->fork_arr, surveil->philo_num) != 0
+		|| ft_set_mutex_num(surveil->napkin_arr, surveil->philo_num) != 0)
+		return (1);
+	memset(surveil->fork_state, 0, sizeof(int) * surveil->philo_num);
+	memset(prg->philo_arr, 0, sizeof(t_philo) * surveil->philo_num);
+	ft_set_philo(prg->philo_arr, prg->last_eat_arr,
+		prg->fork_arr, surveil);
+	return (0);
+}
+
+int	ft_memory_alloc_mutex_and_philo(t_prg *prg, t_sveil *surveil)
+{
 	surveil->print
 		= (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t));
 	surveil->done
@@ -56,17 +72,12 @@ int	ft_init_mutex_and_philo(t_prg *prg, t_sveil *surveil)
 			sizeof(pthread_mutex_t) * surveil->philo_num);
 	prg->philo_arr
 		= (t_philo *)malloc(sizeof(t_philo) * surveil->philo_num);
+	surveil->fork_state
+		= (int *)malloc(sizeof(int) * surveil->philo_num);
 	if (surveil->print == 0 || surveil->done == 0 || prg->fork_arr == 0
 		|| surveil->napkin_arr == 0 || prg->last_eat_arr == 0
-		|| prg->philo_arr == 0 || pthread_mutex_init(surveil->print, 0) != 0
-		|| pthread_mutex_init(surveil->done, 0) != 0
-		|| ft_set_mutex_num(prg->last_eat_arr, surveil->philo_num) != 0
-		|| ft_set_mutex_num(prg->fork_arr, surveil->philo_num) != 0
-		|| ft_set_mutex_num(surveil->napkin_arr, surveil->philo_num) != 0)
+		|| prg->philo_arr == 0 || surveil->fork_state == 0)
 		return (1);
-	memset(prg->philo_arr, 0, sizeof(t_philo) * surveil->philo_num);
-	ft_set_philo(prg->philo_arr, prg->last_eat_arr,
-		prg->fork_arr, surveil);
 	return (0);
 }
 
@@ -94,9 +105,17 @@ void	ft_set_philo(t_philo *philo_arr, pthread_mutex_t *last_eat_arr,
 	{
 		philo_arr[i].number = i + 1;
 		philo_arr[i].first_fork = &(fork_arr[i]);
-		philo_arr[i].second_fork = &(fork_arr[i + 1]);
+		philo_arr[i].fst_fork_state = &(surveil->fork_state[i]);
 		if (i == surveil->philo_num - 1)
+		{
 			philo_arr[i].second_fork = &(fork_arr[0]);
+			philo_arr[i].sec_fork_state = &(surveil->fork_state[0]);
+		}
+		else
+		{
+			philo_arr[i].second_fork = &(fork_arr[i + 1]);
+			philo_arr[i].sec_fork_state = &(surveil->fork_state[i + 1]);
+		}
 		philo_arr[i].napkin = &(surveil->napkin_arr[i]);
 		philo_arr[i].surveil = surveil;
 		philo_arr[i].last_eat = &(last_eat_arr[i]);

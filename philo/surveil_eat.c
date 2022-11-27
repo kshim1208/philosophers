@@ -6,7 +6,7 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/22 16:41:56 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/24 17:10:57 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/28 07:47:58 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,18 +63,6 @@ int	ft_surveil_eat_odd(t_philo *philo_arr, t_sveil *surveil, int type)
 		if (surveil->stop != 1)
 		{
 			pthread_mutex_unlock(surveil->done);
-			/*
-			if (type == E_LAST)
-			{
-				pthread_mutex_unlock(
-					philo_arr[(surveil->philo_num) - 1].napkin);
-				ft_usleep(surveil->time_to_eat * (1000 / 2));
-				pthread_mutex_lock(philo_arr[(surveil->philo_num) - 1].napkin);
-			}
-			else
-				ft_distribue_ret_napkin(
-					philo_arr, surveil, type, (surveil->philo_num) - 1);
-			*/
 			ft_distribue_ret_napkin(
 				philo_arr, surveil, type, (surveil->philo_num) - 1);
 			if (type == E_LAST)
@@ -97,17 +85,26 @@ void	ft_distribue_ret_napkin(t_philo *philo_arr,
 	int	i;
 
 	i = 0;
-	while (i < philo_num)
+	if (type == E_LAST)
 	{
-		pthread_mutex_unlock(philo_arr[i + type].napkin);
-		i = i + 2;
-	}			
-	ft_usleep(surveil->time_to_eat * (1000 / 2));
-	i = i - 2;
-	while (i >= 0)
+		pthread_mutex_unlock(philo_arr[(surveil->philo_num) - 1].napkin);
+		ft_usleep(surveil->time_to_eat * (1000 / 2));
+		pthread_mutex_lock(philo_arr[(surveil->philo_num) - 1].napkin);
+	}
+	else
 	{
-		pthread_mutex_lock(philo_arr[i + type].napkin);
+		while (i < philo_num)
+		{
+			pthread_mutex_unlock(philo_arr[i + type].napkin);
+			i = i + 2;
+		}
+		ft_usleep(surveil->time_to_eat * (1000 / 2));
 		i = i - 2;
+		while (i >= 0)
+		{
+			pthread_mutex_lock(philo_arr[i + type].napkin);
+			i = i - 2;
+		}
 	}
 	return ;
 }
