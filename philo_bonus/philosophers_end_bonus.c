@@ -6,7 +6,7 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/22 16:57:16 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/24 10:52:31 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/28 13:26:54 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,65 +15,57 @@
 
 #include "./philosophers.h"
 
-int	ft_finish_philosophers(t_prg *prg)
+int	ft_finish_philosophers(t_prg *prg, t_sveil *surveil)
 {
 	int	i;
+	int	ret_pid;
 
 	i = 0;
-	pthread_join(prg->surveil->surveil_end, 0);
-	while (i < prg->surveil->philo_num)
+	ret_pid = waitpid(-1, 0, 0);
+	while (i < surveil->philo_num)
 	{
-		pthread_join(prg->philo_arr[i].tid, 0);
+		if (surveil->pid_array[i] != ret_pid)
+		{
+			kill(surveil->pid_array[i], SIGKILL);
+		}
 		i++;
 	}
-	pthread_mutex_unlock(prg->surveil->print);
-	ft_finish_clear_mutex(prg->fork_arr, prg->last_eat_arr,
-		prg->surveil->napkin_arr, prg->surveil->philo_num);
-	ft_finish_clear_surveil(prg->surveil);
-	if (prg->philo_arr != 0)
-		free(prg->philo_arr);
+	i = 0;
+	while (i < surveil->philo_num)
+	{
+		if (surveil->pid_array[i] != ret_pid)
+		{
+			waitpid(surveil->pid_array[i], 0, 0);
+		}
+		i++;
+	}
+	pthread_join(surveil->surveil_eat, 0);
+	if (surveil->philo_num % 2 == 1)
+	{
+		sem_close(surveil->ipc_sems->last_eat);
+		sem_unlink("ft_philo_nap_last");
+	}
+
+	sem_close(surveil->ipc_sems->start_eat);
+	sem_close(surveil->ipc_sems->done);
+	sem_close(surveil->ipc_sems->forks);
+	sem_close(surveil->ipc_sems->napkin_odd);
+	sem_close(surveil->ipc_sems->napkin_even);
+	sem_close(surveil->ipc_sems->napkin_last);
+	sem_close(surveil->ipc_sems->print);
+	sem_close(surveil->ipc_sems->philo_done_eat);
+
+	sem_unlink("ft_philo_start_eat");
+	sem_unlink("ft_philo_done");
+	sem_unlink("ft_philo_forks");
+	sem_unlink("ft_philo_nap_odd");
+	sem_unlink("ft_philo_nap_even");
+	sem_unlink("ft_philo_print");
+	sem_unlink("ft_philo_philo_done_eat");
+	sem_unlink("ft_philo_last_eat");
+
+	free(surveil->ipc_sems);
+	free(prg->philo);
+	free(prg->surveil);
 	return (0);
-}
-
-void	ft_finish_clear_mutex(pthread_mutex_t *fork_arr,
-			pthread_mutex_t *last_eat_arr,
-			pthread_mutex_t *napkin_arr, int philo_num)
-{
-	int	i;
-
-	i = 0;
-	i = 0;
-	while (i < philo_num)
-	{
-		pthread_mutex_destroy(&(fork_arr[i]));
-		pthread_mutex_destroy(&(last_eat_arr[i]));
-		pthread_mutex_destroy(&(napkin_arr[i]));
-		i++;
-	}
-	if (fork_arr != 0)
-		free(fork_arr);
-	if (last_eat_arr != 0)
-		free(last_eat_arr);
-	if (napkin_arr != 0)
-		free(napkin_arr);
-	return ;
-}
-
-void	ft_finish_clear_surveil(t_sveil *surveil)
-{
-	if (surveil != 0)
-	{
-		if (surveil->print != 0)
-		{
-			pthread_mutex_destroy(surveil->print);
-			free(surveil->print);
-		}
-		if (surveil->done != 0)
-		{
-			pthread_mutex_destroy(surveil->done);
-			free(surveil->done);
-		}
-		free(surveil);
-	}
-	return ;
 }

@@ -2,7 +2,6 @@ NAME = philo
 
 CC = cc
 CFLAGS = -Wall -Wextra -Werror
-DEBUG = -fsanitizer_thread -d
 RM = rm
 RMFLAGS = -f
 
@@ -15,15 +14,14 @@ OBJS = $(SRCS:.c=.o)
 
 all : $(NAME)
 
-$(NAME): $(OBJS)
-	$(CC) $(CFLAGS) $(DEBUG) $(OBJS) -o $(NAME)
+$(NAME): $(OBJS) $(DEPS)
+	$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
 
-%.o	: %.c
-	$(CC) $(CFLAGS) $(DEBUG) $(HEADERS) -c $< -o $@
+%.o : %.c
+	$(CC) $(CFLAGS) $(HEADERS) -c $< -o $@ 
 
-	
 clean:
-	$(RM) $(RMFLAGS) $(OBJS)
+	$(RM) $(RMFLAGS) $(OBJS) $(DEPS)
 
 fclean: clean
 	$(RM) $(RMFLAGS) $(NAME)
@@ -33,4 +31,3 @@ re:
 	make all
 
 .PHONY: all bonus clean fclean re
-

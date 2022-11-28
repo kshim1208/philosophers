@@ -6,7 +6,7 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/15 10:31:05 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/24 10:52:34 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/28 12:46:05 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,27 +44,52 @@ int	ft_atoi(const char *str)
 	return ((int)(ret * sign));
 }
 
+int	ft_philo_routine_only_one(t_philo *philo)
+{
+	while (1)
+	{
+		sem_wait(philo->napkin);
+		sem_wait(surveil->ipc_sems->forks);
+		if (ft_print_with_mutex(philo, philo->surveil, "has taken a fork") != 0)
+		{
+			sem_post(surveil->ipc_sems->forks);
+			return (1);
+		}
+		ft_usleep((philo->surveil->time_to_die * 1000) + 100);
+		sem_post(surveil->ipc_sems->forks);
+		sem_wait(philo->surveil->ipc_sems->done);
+		if (philo->surveil->stop == 1)
+		{
+			sem_post(philo->surveil->ipc_sems->done);
+			sem_post(philo->napkin);
+			break ;
+		}
+		sem_post(philo->napkin);
+	}
+	return (0);
+}
+
 int	ft_print_with_mutex(t_philo *philo, t_sveil *surveil, char *str)
 {
-	pthread_mutex_lock(surveil->done);
+	sem_wait(surveil->ipc_sems->print);
+	sem_wait(surveil->ipc_sems->done);
 	if (surveil->stop != 1)
 	{
-		pthread_mutex_lock(surveil->print);
+		sem_post(surveil->ipc_sems->done);
 		if (printf("%llu %d %s\n",
 				ft_set_timestamp(philo), philo->number, str) == -1)
 		{
-			pthread_mutex_unlock(surveil->done);
-			pthread_mutex_unlock(surveil->print);
+			sem_post(surveil->ipc_sems->print);
 			return (1);
 		}
-		pthread_mutex_unlock(surveil->print);
+		sem_post(surveil->ipc_sems->print);
 	}
-	if (surveil->stop == 1)
+	else if (surveil->stop == 1)
 	{
-		pthread_mutex_unlock(surveil->done);
-		return (0);
+		sem_post(surveil->ipc_sems->done);
+		sem_post(surveil->ipc_sems->print);
+		return (1);
 	}
-	pthread_mutex_unlock(surveil->done);
 	return (0);
 }
 

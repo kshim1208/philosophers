@@ -6,7 +6,7 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/15 07:53:02 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/24 10:52:22 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/28 13:50:24 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,124 +14,118 @@
 
 #include "./philosophers.h"
 
-int	ft_phiosophers_start(t_prg *prg, t_philo *philo_arr, t_sveil *surveil)
+int	ft_phiosophers_start(t_prg *prg, t_philo *philo, t_sveil *surveil)
 {
-	int			i;
+	int	i;
 
 	i = 0;
-	surveil->start_time = ft_set_now_ms();
-	pthread_create(&(surveil->surveil_end), 0,
-		(void *)ft_surveil_end, (void *)prg);
-	ft_surveil_eat_set_napkin(surveil, E_LOCK);
-	if (surveil->philo_num == 1)
-		pthread_create(&(philo_arr[0].tid), 0,
-			(void *)ft_philo_routine_only_one, (void *)&(philo_arr[0]));
-	else
+	surveil->start_time = ft_set_now_micro_s();
+	while (i < surveil->philo_num)
 	{
-		while (i < prg->surveil->philo_num)
+		philo->number = i + 1;
+		prg->pid_array[i] = fork();
+		if (prg->pid_array[i] == -1)
 		{
-			pthread_create(&(philo_arr[i].tid), 0,
-				(void *)ft_philo_routine, (void *)&(philo_arr[i]));
-			i++;
+			// fork_예외처리
 		}
-	}
-	ft_surveil_eat(philo_arr, surveil);
-	ft_finish_philosophers(prg);
-	return (0);
-}
-
-int	ft_philo_routine_only_one(t_philo *philo)
-{
-	t_sveil	*surveil;
-
-	surveil = philo->surveil;
-	while (1)
-	{
-		pthread_mutex_lock(philo->napkin);
-		pthread_mutex_lock(philo->first_fork);
-		ft_print_with_mutex(philo, surveil, "has taken a fork");
-		if (ft_usleep((surveil->time_to_die * 1000) + 100) != 0)
+		else if (prg->pid_array[i] != 0)
 		{
-			pthread_mutex_unlock(philo->first_fork);
-			pthread_mutex_unlock(philo->napkin);
-			return (1);
-		}
-		pthread_mutex_unlock(philo->first_fork);
-		pthread_mutex_lock(surveil->done);
-		if (surveil->stop == 1)
-		{
-			pthread_mutex_unlock(surveil->done);
-			pthread_mutex_unlock(philo->napkin);
+			ft_philo_routine(philo, surveil);
 			break ;
 		}
+		i++;
 	}
+	pthread_create(&(surveil->surveil_napkin), 0,
+		(void *)ft_surveil_napkin, (void *)prg);
+	i = 0;
+	while (i < surveil->philo_num)
+	{
+		sem_post(surveil->ipc_sems->start_eat);
+		i++;
+	}
+	pthread_create(&(surveil->surveil_done_eat), 0,
+		(void *)ft_surveil_end_philo_done_eat, (void *)surveil);
 	return (0);
 }
 
-int	ft_philo_routine(t_philo *philo)
+int	ft_philo_routine(t_philo *philo, t_sveil *surveil)
 {
-	t_sveil	*surveil;
-
-	surveil = philo->surveil;
-	if (philo->number % 2 == 0 || philo->number == surveil->philo_num)
-		ft_usleep(surveil->time_to_eat * (1000 / 5));
+	pthread_create(&(surveil->surveil_end), 0,
+		(void *)surveil_end, (void *)philo);
+	if (philo->number == surveil->philo_num)
+		philo->napkin = surveil->napkin_last;
+	else if (philo->number % 2 == 1)
+		philo->napkin = surveil->napkin_odd;
+	else if (philo->number % 2 == 0)
+		philo->napkin = surveil->napkin_even;
+	sem_wait(surveil->ipc_sems->start_eat);
 	while (1)
 	{
 		if (ft_philo_eat(philo, surveil) != 0)
-			return (1);
-		if (ft_philo_end_or_wait(philo, surveil) != 0)
 		{
-			pthread_mutex_unlock(philo->first_fork);
-			pthread_mutex_unlock(philo->napkin);
-			return (1);
+			sem_post(surveil->ipc_sems->forks);
+			sem_post(philo->napkin);
+			break ;
 		}
-		pthread_mutex_lock(surveil->done);
+		if (ft_philo_sleep_think(philo, surveil) != 0)
+			break ;
+		sem_wait(surveil->ipc_sems->done);
 		if (surveil->stop == 1)
 		{
-			pthread_mutex_unlock(surveil->done);
-			return (0);
+			sem_post(surveil->ipc_sems->done);
+			break ;
 		}
-		pthread_mutex_unlock(surveil->done);
+		sem_post(surveil->ipc_sems->done);
 	}
+	pthread_join(surveil->surveil_end, 0);
 	return (1);
 }
 
 int	ft_philo_eat(t_philo *philo, t_sveil *surveil)
 {
-	pthread_mutex_lock(philo->napkin);
-	pthread_mutex_lock(philo->first_fork);
+	sem_wait(philo->napkin);
+	sem_wait(surveil->ipc_sems->forks);
 	if (ft_print_with_mutex(philo, surveil, "has taken a fork") != 0)
 		return (1);
-	pthread_mutex_lock(philo->second_fork);
+	sem_wait(surveil->ipc_sems->forks);
 	if (ft_print_with_mutex(philo, surveil, "has taken a fork") != 0
 		|| ft_print_with_mutex(philo, surveil, "is eating") != 0)
 	{
-		pthread_mutex_unlock(philo->napkin);
+		sem_post(surveil->ipc_sems->forks);
 		return (1);
 	}
-	pthread_mutex_lock(philo->last_eat);
+	sem_wait(surveil->ipc_sems->last_eat);
 	philo->last_eat_time = ft_set_timestamp(philo);
-	pthread_mutex_unlock(philo->last_eat);
+	sem_post(surveil->ipc_sems->last_eat);
+	ft_philo_after_eat(philo, surveil);
 	ft_usleep(surveil->time_to_eat * 1000);
-	pthread_mutex_unlock(philo->second_fork);
-	pthread_mutex_unlock(philo->first_fork);
-	philo->number_of_eat++;
-	pthread_mutex_unlock(philo->napkin);
+	sem_post(surveil->ipc_sems->forks);
+	sem_post(surveil->ipc_sems->forks);
+	sem_post(philo->napkin);
 	return (0);
 }
 
-int	ft_philo_end_or_wait(t_philo *philo, t_sveil *surveil)
+// 식사량 보고 관련 동작 다시 한 번 생각해보자. 뮤텍스 사용 불가능하니 고민 필요.
+int	ft_philo_after_eat(t_philo *philo, t_sveil *surveil)
 {
+	philo->number_of_eat++;
 	if (philo->number_of_eat == surveil->number_to_eat)
+		sem_post(surveil->ipc_sems->philo_done_eat);
+	return (0);
+}
+
+int	ft_philo_sleep_think(t_philo *philo, t_sveil *surveil)
+{
+	sem_wait(surveil->ipc_sems->done);
+	if (surveil->stop != 1)
 	{
-		pthread_mutex_lock(surveil->done);
-		surveil->philo_done_eat++;
-		pthread_mutex_unlock(surveil->done);
+		sem_post(surveil->ipc_sems->done);
+		if (ft_print_with_mutex(philo, surveil, "is sleeping") != 0)
+			return (1);
+		ft_usleep(surveil->time_to_sleep * 1000);
+		if (ft_print_with_mutex(philo, surveil, "is thinking") != 0)
+			return (1);
 	}
-	if (ft_print_with_mutex(philo, surveil, "is sleeping") != 0)
-		return (1);
-	ft_usleep(surveil->time_to_sleep * 1000);
-	if (ft_print_with_mutex(philo, surveil, "is thinking") != 0)
-		return (1);
+	sem_post(surveil->ipc_sems->done);
 	return (0);
 }

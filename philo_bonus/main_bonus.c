@@ -6,7 +6,7 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/14 16:54:31 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/24 10:52:21 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/28 12:01:36 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,11 @@ int	main(int argc, char **argv)
 		return (1);
 	if (ft_init_surveil_argument(argc, argv, &prg) != 0)
 		return (1);
-	if (ft_init_mutex_and_philo(&prg, prg.surveil) != 0)
+	if (ft_mem_alloc_philo_semas_pids(&prg) != 0)
 		return (1);
+	if (ft_open_semas_and_set_philo(prg.surveil) != 0)
+		return (1);
+	// semaphore 에러의 경우 이미 생성된 세마포어 정리하는 부분 필요함.
 	if (ft_phiosophers_start(&prg, prg.philo_arr, prg.surveil) != 0)
 		return (1);
 	return (0);
