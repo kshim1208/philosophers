@@ -6,14 +6,28 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/22 16:57:16 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/28 13:26:54 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/28 15:17:27 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <unistd.h>
 #include <stdlib.h>
+#include <signal.h>
 
-#include "./philosophers.h"
+#include "./philosophers_bonus.h"
+
+int	ft_surveil_end_philo_done_eat(t_sveil *surveil)
+{
+	int	i;
+
+	i = 0;
+	while (i < surveil->philo_num)
+	{
+		sem_wait(surveil->ipc_sems->philo_done_eat);
+		i++;
+	}
+	return (0);
+}
 
 int	ft_finish_philosophers(t_prg *prg, t_sveil *surveil)
 {
@@ -22,6 +36,9 @@ int	ft_finish_philosophers(t_prg *prg, t_sveil *surveil)
 
 	i = 0;
 	ret_pid = waitpid(-1, 0, 0);
+	sem_wait(surveil->ipc_sems->done);
+	surveil->stop = 1;
+	sem_post(surveil->ipc_sems->done);
 	while (i < surveil->philo_num)
 	{
 		if (surveil->pid_array[i] != ret_pid)
@@ -39,7 +56,8 @@ int	ft_finish_philosophers(t_prg *prg, t_sveil *surveil)
 		}
 		i++;
 	}
-	pthread_join(surveil->surveil_eat, 0);
+	pthread_join(surveil->surveil_napkin, 0);
+	pthread_join(surveil->surveil_done_eat, 0);
 	if (surveil->philo_num % 2 == 1)
 	{
 		sem_close(surveil->ipc_sems->last_eat);

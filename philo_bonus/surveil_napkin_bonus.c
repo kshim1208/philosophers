@@ -6,7 +6,7 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/22 16:41:56 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/28 13:32:52 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/28 15:20:05 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,13 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "./philosophers.h"
+#include "./philosophers_bonus.h"
 
-int	ft_surveil_napkin(t_prg *prg)
+int	ft_surveil_napkin(t_sveil *surveil)
 {
 	int		type;
-	t_sveil	*surveil;
 
 	type = E_ODD;
-	surveil = prg->surveil;
 	if (surveil->philo_num == 1)
 		type = E_LAST;
 	if (surveil->philo_num % 2 == 0)
@@ -41,7 +39,7 @@ int	ft_surveil_napkin_even(t_sveil *surveil, int type)
 		{
 			sem_post(surveil->ipc_sems->done);
 			ft_distribue_ret_napkin(
-				philo_arr, surveil, type, surveil->half_num);
+				surveil, type, surveil->half_num);
 			if (type == E_ODD)
 				type = E_EVEN;
 			else if (type == E_EVEN)
@@ -65,7 +63,7 @@ int	ft_surveil_napkin_odd(t_sveil *surveil, int type)
 		{
 			sem_post(surveil->ipc_sems->done);
 			ft_distribue_ret_napkin(
-				philo_arr, surveil, type, surveil->half_num);
+				surveil, type, surveil->half_num);
 			if (type == E_LAST)
 				type = E_ODD;
 			else
@@ -80,7 +78,7 @@ int	ft_surveil_napkin_odd(t_sveil *surveil, int type)
 	return (0);
 }
 
-void	ft_distribue_ret_napkin(t_philo *philo_arr,
+void	ft_distribue_ret_napkin(
 			t_sveil *surveil, int type, int num)
 {
 	int		i;

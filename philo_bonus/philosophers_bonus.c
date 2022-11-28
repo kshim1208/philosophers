@@ -6,13 +6,16 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/15 07:53:02 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/28 13:50:24 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/28 15:49:01 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
+#include <unistd.h>
 
-#include "./philosophers.h"
+#include "./philosophers_bonus.h"
+
+#include <stdio.h>
 
 int	ft_phiosophers_start(t_prg *prg, t_philo *philo, t_sveil *surveil)
 {
@@ -23,12 +26,12 @@ int	ft_phiosophers_start(t_prg *prg, t_philo *philo, t_sveil *surveil)
 	while (i < surveil->philo_num)
 	{
 		philo->number = i + 1;
-		prg->pid_array[i] = fork();
-		if (prg->pid_array[i] == -1)
+		surveil->pid_array[i] = fork();
+		if (surveil->pid_array[i] == -1)
 		{
 			// fork_예외처리
 		}
-		else if (prg->pid_array[i] != 0)
+		else if (surveil->pid_array[i] != 0)
 		{
 			ft_philo_routine(philo, surveil);
 			break ;
@@ -45,19 +48,20 @@ int	ft_phiosophers_start(t_prg *prg, t_philo *philo, t_sveil *surveil)
 	}
 	pthread_create(&(surveil->surveil_done_eat), 0,
 		(void *)ft_surveil_end_philo_done_eat, (void *)surveil);
+	ft_finish_philosophers(prg, surveil);
 	return (0);
 }
 
 int	ft_philo_routine(t_philo *philo, t_sveil *surveil)
 {
-	pthread_create(&(surveil->surveil_end), 0,
-		(void *)surveil_end, (void *)philo);
-	if (philo->number == surveil->philo_num)
-		philo->napkin = surveil->napkin_last;
-	else if (philo->number % 2 == 1)
-		philo->napkin = surveil->napkin_odd;
-	else if (philo->number % 2 == 0)
-		philo->napkin = surveil->napkin_even;
+	pthread_create(&(philo->surveil_end), 0,
+		(void *)ft_surveil_end, (void *)philo);
+	if (philo->number != surveil->philo_num && philo->number % 2 == 1)
+		philo->napkin = surveil->ipc_sems->napkin_odd;
+	else if (philo->number != surveil->philo_num && philo->number % 2 == 0)
+		philo->napkin = surveil->ipc_sems->napkin_even;
+	else if (philo->number == surveil->philo_num)
+		philo->napkin = surveil->ipc_sems->napkin_last;
 	sem_wait(surveil->ipc_sems->start_eat);
 	while (1)
 	{
@@ -77,7 +81,7 @@ int	ft_philo_routine(t_philo *philo, t_sveil *surveil)
 		}
 		sem_post(surveil->ipc_sems->done);
 	}
-	pthread_join(surveil->surveil_end, 0);
+	pthread_join(philo->surveil_end, 0);
 	return (1);
 }
 

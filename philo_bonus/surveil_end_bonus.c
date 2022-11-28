@@ -6,7 +6,7 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/22 16:41:47 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/28 14:33:05 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/28 15:46:14 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,10 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "./philosophers.h"
+#include "./philosophers_bonus.h"
 
 int	ft_surveil_end(t_philo *philo)
 {
-	int			i;
 	t_sveil		*surveil;
 
 	surveil = philo->surveil;
@@ -51,28 +50,15 @@ int	ft_surveil_end_last_eat(t_philo *philo, t_sveil *surveil)
 		sem_wait(surveil->ipc_sems->done);
 		surveil->stop = 1;
 		sem_post(surveil->ipc_sems->done);
-		if (printf("%llu %d died\n", ft_set_timestamp(philo),
+		if (printf("%llu %d died\n", ft_set_timestamp(philo) / 1000,
 				philo->number) == -1)
 		{
 			sem_post(surveil->ipc_sems->print);
 			return (1);
 		}
 		sem_post(surveil->ipc_sems->print);
-		return (0);
+		return (1);
 	}
 	sem_post(surveil->ipc_sems->last_eat);
 	return (0);
-}
-
-int	ft_surveil_end_philo_done_eat(t_sveil *surveil)
-{
-	int	i;
-
-	i = 0;
-	while (i < surveil->philo_num)
-	{
-		sem_wait(surveil->ipc_sems->philo_done_eat);
-		i++;
-	}
-	// 다 먹었다는 뜻 -> 출력 정지 필요
 }

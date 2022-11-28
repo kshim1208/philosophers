@@ -1,11 +1,18 @@
-NAME = philo
+NAME = philo_bonus
 
 CC = cc
 CFLAGS = -Wall -Wextra -Werror
+
+
+
+DEBUG = -g
+
+
+
 RM = rm
 RMFLAGS = -f
 
-SRC_FILES	= main.c initialize.c philosophers.c philosophers_end.c surveil_eat.c surveil_end.c time.c util.c
+SRC_FILES	= main_bonus.c initialize_bonus.c philosophers_bonus.c philosophers_end_bonus.c surveil_napkin_bonus.c surveil_end_bonus.c time_bonus.c util_bonus.c
 
 SRCS = $(SRC_FILES)
 
@@ -15,10 +22,10 @@ OBJS = $(SRCS:.c=.o)
 all : $(NAME)
 
 $(NAME): $(OBJS) $(DEPS)
-	$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
+	$(CC) $(CFLAGS)        $(DEBUG)       $(OBJS) -o $(NAME)
 
 %.o : %.c
-	$(CC) $(CFLAGS) $(HEADERS) -c $< -o $@ 
+	$(CC) $(CFLAGS)        $(DEBUG)       $(HEADERS) -c $< -o $@ 
 
 clean:
 	$(RM) $(RMFLAGS) $(OBJS) $(DEPS)

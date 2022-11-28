@@ -6,7 +6,7 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/14 16:56:00 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/28 13:38:33 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/28 15:20:42 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,18 @@ typedef enum e_fork_state{
 	E_HOLD
 }			t_fork_state;
 
+typedef struct s_interprocess_semaphores{
+	sem_t			*start_eat;
+	sem_t			*done;
+	sem_t			*forks;
+	sem_t			*napkin_odd;
+	sem_t			*napkin_even;
+	sem_t			*napkin_last;
+	sem_t			*print;
+	sem_t			*philo_done_eat;
+	sem_t			*last_eat;
+}			t_ipc_sem;
+
 typedef struct s_surveil{
 	int				philo_num;
 	int				half_num;
@@ -61,18 +73,6 @@ typedef struct s_philosopher{
 	t_sveil			*surveil;
 }			t_philo;
 
-typedef struct s_interprocess_semaphores{
-	sem_t			*start_eat;
-	sem_t			*done;
-	sem_t			*forks;
-	sem_t			*napkin_odd;
-	sem_t			*napkin_even;
-	sem_t			*napkin_last;
-	sem_t			*print;
-	sem_t			*philo_done_eat;
-	sem_t			*last_eat;
-}			t_ipc_sem;
-
 typedef struct s_program_data{
 	t_sveil			*surveil;
 	t_philo			*philo;
@@ -84,13 +84,14 @@ int			ft_open_semas(t_sveil *surveil);
 sem_t		*ft_philo_sem_open(const char *name, int value);
 
 int			ft_phiosophers_start(t_prg *prg,
-				t_philo *philo_arr, t_sveil *surveil);
-int			ft_philo_routine(t_philo *philo);
+				t_philo *philo, t_sveil *surveil);
+int			ft_philo_routine(t_philo *philo, t_sveil *surveil);
 int			ft_philo_eat(t_philo *philo, t_sveil *surveil);
 int			ft_philo_after_eat(t_philo *philo, t_sveil *surveil);
 int			ft_philo_sleep_think(t_philo *philo, t_sveil *surveil);
 
-int			ft_finish_philosophers(t_prg *prg);
+int			ft_surveil_end_philo_done_eat(t_sveil *surveil);
+int			ft_finish_philosophers(t_prg *prg, t_sveil *surveil);
 
 int			ft_atoi(const char *str);
 int			ft_philo_routine_only_one(t_philo *philo);
@@ -101,14 +102,14 @@ uint64_t	ft_set_now_micro_s(void);
 uint64_t	ft_set_timestamp(t_philo *philo);
 uint64_t	ft_set_time_after_last_eat(t_philo *philo);
 
-int			ft_surveil_end(t_prg *prg);
-int			ft_surveil_end_last_eat(t_philo *philo_arr, t_sveil *surveil);
+int			ft_surveil_end(t_philo *philo);
+int			ft_surveil_end_last_eat(t_philo *philo, t_sveil *surveil);
 
-int			ft_surveil_napkin(t_philo *philo_arr, t_sveil *surveil);
-int			ft_surveil_napkin_even(t_philo *philo_arr, t_sveil *surveil, int type);
-int			ft_surveil_napkin_odd(t_philo *philo_arr, t_sveil *surveil, int type);
-void		ft_distribue_ret_napkin(t_philo *philo_arr,
-				t_sveil *surveil, int type, int philo_num);
+int			ft_surveil_napkin(t_sveil *surveil);
+int			ft_surveil_napkin_even(t_sveil *surveil, int type);
+int			ft_surveil_napkin_odd(t_sveil *surveil, int type);
+void		ft_distribue_ret_napkin(
+				t_sveil *surveil, int type, int num);
 void		ft_surveil_napkin_set(t_sveil *surveil, int set_mode);
 
 #endif

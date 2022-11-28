@@ -6,14 +6,14 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/15 07:36:01 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/28 12:41:01 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/28 15:27:10 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <string.h>
 #include <stdlib.h>
 
-#include "./philosophers.h"
+#include "./philosophers_bonus.h"
 
 int	ft_init_surveil_argument(int argc, char **argv, t_prg *prg)
 {
@@ -59,6 +59,7 @@ int	ft_mem_alloc_philo_semas_pids(t_prg *prg)
 	if (prg->surveil->pid_array == 0)
 		return (1);
 	memset(prg->surveil->pid_array, 0, sizeof(int) * prg->surveil->philo_num);
+	prg->philo->surveil = prg->surveil;
 	return (0);
 }
 
@@ -93,6 +94,8 @@ int	ft_open_semas(t_sveil *surveil)
 	return (0);
 }
 
+// unlink를 sem_open 에러 시에 수행하고 open을 재시도하게 만드는 건 어떨까?
+	// errno 사용 못해서 sem_open의 에러를 구분할 수 없는데 그렇게 만들어야 하나?
 sem_t	*ft_philo_sem_open(const char *name, int value)
 {
 	sem_t	*tmp;
