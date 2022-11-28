@@ -6,7 +6,7 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/14 16:56:00 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/28 08:40:46 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/28 10:03:01 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ typedef struct s_surveil{
 	int				time_to_sleep;
 	int				stop;
 	int				time_to_die;
+	uint64_t		time_to_die_micro;
 	int				number_to_eat;
 	int				philo_done_eat;
 	pthread_mutex_t	*print;
@@ -94,7 +95,7 @@ int			ft_philo_routine_only_one(t_philo *philo);
 int			ft_print_with_mutex(t_philo *philo, t_sveil *surveil, char *str);
 int			ft_usleep(uint64_t sleep_time);
 
-uint64_t	ft_set_now_ms(void);
+uint64_t	ft_set_now_micro_s(void);
 uint64_t	ft_set_timestamp(t_philo *philo);
 uint64_t	ft_set_time_after_last_eat(t_philo *philo);
 

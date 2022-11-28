@@ -6,7 +6,7 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/15 07:53:02 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/28 08:18:58 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/28 09:50:54 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	ft_phiosophers_start(t_prg *prg, t_philo *philo_arr, t_sveil *surveil)
 	int			i;
 
 	i = 0;
-	surveil->start_time = ft_set_now_ms();
+	surveil->start_time = ft_set_now_micro_s();
 	pthread_create(&(surveil->surveil_end), 0,
 		(void *)ft_surveil_end, (void *)prg);
 	ft_surveil_eat_set_napkin(surveil, E_LOCK);

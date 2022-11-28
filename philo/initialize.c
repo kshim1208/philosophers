@@ -6,7 +6,7 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/15 07:36:01 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/28 08:10:15 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/28 10:03:19 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,15 +24,16 @@ int	ft_init_surveil_argument(int argc, char **argv, t_prg *prg)
 	memset(prg->surveil, 0, sizeof(t_sveil));
 	prg->surveil->philo_num = ft_atoi(argv[1]);
 	prg->surveil->time_to_die = ft_atoi(argv[2]);
+	prg->surveil->time_to_die_micro = prg->surveil->time_to_die * 1000;
 	prg->surveil->time_to_eat = ft_atoi(argv[3]);
 	prg->surveil->time_to_sleep = ft_atoi(argv[4]);
 	if (argc == 6)
 		prg->surveil->number_to_eat = ft_atoi(argv[5]);
 	else
 		prg->surveil->number_to_eat = -1;
-	if (prg->surveil->philo_num <= 0 || prg->surveil->time_to_die < 0
-		|| prg->surveil->time_to_eat < 0
-		|| prg->surveil->time_to_sleep < 0
+	if (prg->surveil->philo_num <= 0 || prg->surveil->time_to_die <= 0
+		|| prg->surveil->time_to_eat <= 0
+		|| prg->surveil->time_to_sleep <= 0
 		|| (argc == 6 && prg->surveil->number_to_eat <= 0))
 	{
 		free(prg->surveil);

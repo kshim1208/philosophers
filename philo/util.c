@@ -6,7 +6,7 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/15 10:31:05 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/28 08:19:26 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/28 10:05:28 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ int	ft_print_with_mutex(t_philo *philo, t_sveil *surveil, char *str)
 	{
 		pthread_mutex_unlock(surveil->done);
 		if (printf("%llu %d %s\n",
-				ft_set_timestamp(philo), philo->number, str) == -1)
+				ft_set_timestamp(philo) / 1000, philo->number, str) == -1)
 		{
 			pthread_mutex_unlock(surveil->print);
 			return (1);
@@ -101,16 +101,20 @@ int	ft_usleep(uint64_t sleep_time)
 	uint64_t	target_time;
 	uint64_t	now_time;
 
-	target_time = ft_set_now_ms() + (sleep_time / 1000);
+	target_time = ft_set_now_micro_s() + sleep_time;
 	while (1)
 	{
-		now_time = ft_set_now_ms();
+		now_time = ft_set_now_micro_s();
 		if (target_time <= now_time)
 			return (0);
-		sleep_time = (target_time - now_time) * (1000 / 2);
+		sleep_time = target_time - now_time;
 		if (sleep_time < 10)
-			sleep_time = 10;
-		usleep(sleep_time);
+			usleep(10);
+		else
+		{
+			sleep_time = sleep_time / 2;
+			usleep(sleep_time);
+		}
 	}
 	return (0);
 }

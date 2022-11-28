@@ -11,19 +11,14 @@ SRCS = $(SRC_FILES)
 
 OBJS = $(SRCS:.c=.o)
 
-DEPS = $(SRCS:.c=.d)
-
 
 all : $(NAME)
 
 $(NAME): $(OBJS) $(DEPS)
 	$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
 
-%.o	: %.c %.d
-	$(CC) $(CFLAGS) $(HEADERS) -c $< -o $@
-
-%.d : %.c
-	$(CC) $(CFLAGS) $(HEADERS) -c $< -o $@ -MDD
+%.o : %.c
+	$(CC) $(CFLAGS) $(HEADERS) -c $< -o $@ 
 
 clean:
 	$(RM) $(RMFLAGS) $(OBJS) $(DEPS)
@@ -36,5 +31,3 @@ re:
 	make all
 
 .PHONY: all bonus clean fclean re
-
--include $(DEPS)
