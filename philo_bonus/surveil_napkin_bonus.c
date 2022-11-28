@@ -6,15 +6,16 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/22 16:41:56 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/28 15:20:05 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/29 08:47:22 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <unistd.h>
 #include <stdlib.h>
-#include <stdio.h>
 
 #include "./philosophers_bonus.h"
+
+#include <stdio.h>
 
 int	ft_surveil_napkin(t_sveil *surveil)
 {
@@ -84,7 +85,6 @@ void	ft_distribue_ret_napkin(
 	int		i;
 	sem_t	*napkin_addr;
 
-	i = 0;
 	if (type == E_LAST)
 	{
 		sem_post(surveil->ipc_sems->napkin_last);
@@ -97,6 +97,7 @@ void	ft_distribue_ret_napkin(
 			napkin_addr = surveil->ipc_sems->napkin_odd;
 		else
 			napkin_addr = surveil->ipc_sems->napkin_even;
+		i = 0;
 		while (i < num)
 		{
 			sem_post(napkin_addr);

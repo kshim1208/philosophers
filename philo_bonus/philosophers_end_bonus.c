@@ -6,7 +6,7 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/22 16:57:16 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/28 15:17:27 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/29 08:31:06 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 #include <signal.h>
 
 #include "./philosophers_bonus.h"
+
+#include <stdio.h>
 
 int	ft_surveil_end_philo_done_eat(t_sveil *surveil)
 {
@@ -26,6 +28,8 @@ int	ft_surveil_end_philo_done_eat(t_sveil *surveil)
 		sem_wait(surveil->ipc_sems->philo_done_eat);
 		i++;
 	}
+	// 이후 종료 동작은?
+		// finish랑 중복되는 부분 있는 것 같음. 동작 정리해보자.
 	return (0);
 }
 
@@ -43,7 +47,7 @@ int	ft_finish_philosophers(t_prg *prg, t_sveil *surveil)
 	{
 		if (surveil->pid_array[i] != ret_pid)
 		{
-			kill(surveil->pid_array[i], SIGKILL);
+			kill(surveil->pid_array[i], SIGTERM);
 		}
 		i++;
 	}
