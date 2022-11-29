@@ -6,7 +6,7 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/15 10:31:05 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/29 13:53:02 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/29 14:57:31 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,10 +134,4 @@ void	ft_philo_sem_name_array(t_sveil *surveil)
 	surveil->sem_name_arr[E_FINISH] = "ft_philo_finish";
 	surveil->sem_name_arr[E_NAP_LAST] = "ft_philo_nap_last";
 	return ;
-}
-
-void	ft_exit_after_unlink_sem(t_sveil *surveil)
-{
-	ft_sem_close_unlink(surveil);
-	exit(1);
 }

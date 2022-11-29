@@ -12,7 +12,7 @@ DEBUG = -g
 RM = rm
 RMFLAGS = -f
 
-SRC_FILES	= main_bonus.c initialize_bonus.c philosophers_bonus.c philosophers_end_bonus.c surveil_napkin_bonus.c surveil_end_bonus.c time_bonus.c util_bonus.c
+SRC_FILES	= main_bonus.c initialize_bonus.c philosophers_bonus.c philosophers_fork_bonus.c philosophers_end_bonus.c surveil_napkin_bonus.c surveil_end_bonus.c time_bonus.c util_bonus.c
 
 SRCS = $(SRC_FILES)
 

@@ -6,7 +6,7 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/22 16:41:56 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/29 13:04:32 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/29 14:52:39 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,6 @@
 #include <stdlib.h>
 
 #include "./philosophers_bonus.h"
-
-#include <stdio.h>
 
 int	ft_surveil_napkin(t_sveil *surveil)
 {
@@ -28,7 +26,7 @@ int	ft_surveil_napkin(t_sveil *surveil)
 		ft_surveil_napkin_even(surveil, type);
 	else
 		ft_surveil_napkin_odd(surveil, type);
-	return (0);
+	exit(0);
 }
 
 int	ft_surveil_napkin_even(t_sveil *surveil, int type)
