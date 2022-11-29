@@ -6,7 +6,7 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/22 16:57:16 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/29 13:52:32 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/29 16:07:28 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@ int	ft_finish_philosophers(t_prg *prg, t_sveil *surveil)
 	ft_philo_end_wait_kill(surveil, ret_pid);
 	ft_sem_close_unlink(surveil);
 	free(surveil->ipc_sems);
+	free(surveil->pid_array);
+	free(surveil->sem_name_arr);
 	free(prg->philo);
 	free(prg->surveil);
 	return (0);

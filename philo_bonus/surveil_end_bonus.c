@@ -6,7 +6,7 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/22 16:41:47 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/29 13:05:51 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/29 16:30:12 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,8 @@ int	ft_surveil_end_last_eat(t_philo *philo, t_sveil *surveil)
 	if (ft_set_time_after_last_eat(
 			philo) >= (uint64_t)surveil->time_to_die_micro)
 	{
-		sem_wait(surveil->ipc_sems->print);
 		sem_post(surveil->ipc_sems->last_eat);
+		sem_wait(surveil->ipc_sems->print);
 		sem_wait(surveil->ipc_sems->done);
 		surveil->stop = 1;
 		sem_post(surveil->ipc_sems->done);
@@ -46,9 +46,11 @@ int	ft_surveil_end_last_eat(t_philo *philo, t_sveil *surveil)
 				philo->number) == -1)
 		{
 			sem_wait(surveil->ipc_sems->finish);
+			sem_post(surveil->ipc_sems->print);
 			exit(1);
 		}
 		sem_wait(surveil->ipc_sems->finish);
+		sem_post(surveil->ipc_sems->print);
 		exit(0);
 	}
 	sem_post(surveil->ipc_sems->last_eat);
