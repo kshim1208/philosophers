@@ -6,7 +6,7 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/14 16:56:00 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/28 15:20:42 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/29 10:07:57 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,7 @@ typedef struct s_interprocess_semaphores{
 	sem_t			*start_eat;
 	sem_t			*done;
 	sem_t			*forks;
-	sem_t			*napkin_odd;
-	sem_t			*napkin_even;
+	sem_t			*napkin_half;
 	sem_t			*napkin_last;
 	sem_t			*print;
 	sem_t			*philo_done_eat;
@@ -108,7 +107,7 @@ int			ft_surveil_end_last_eat(t_philo *philo, t_sveil *surveil);
 int			ft_surveil_napkin(t_sveil *surveil);
 int			ft_surveil_napkin_even(t_sveil *surveil, int type);
 int			ft_surveil_napkin_odd(t_sveil *surveil, int type);
-void		ft_distribue_ret_napkin(
+void		ft_distribute_ret_napkin(
 				t_sveil *surveil, int type, int num);
 void		ft_surveil_napkin_set(t_sveil *surveil, int set_mode);
 

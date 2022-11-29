@@ -6,7 +6,7 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/22 16:41:56 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/29 08:47:22 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/29 10:07:52 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int	ft_surveil_napkin_even(t_sveil *surveil, int type)
 		if (surveil->stop != 1)
 		{
 			sem_post(surveil->ipc_sems->done);
-			ft_distribue_ret_napkin(
+			ft_distribute_ret_napkin(
 				surveil, type, surveil->half_num);
 			if (type == E_ODD)
 				type = E_EVEN;
@@ -63,7 +63,7 @@ int	ft_surveil_napkin_odd(t_sveil *surveil, int type)
 		if (surveil->stop != 1)
 		{
 			sem_post(surveil->ipc_sems->done);
-			ft_distribue_ret_napkin(
+			ft_distribute_ret_napkin(
 				surveil, type, surveil->half_num);
 			if (type == E_LAST)
 				type = E_ODD;
@@ -79,11 +79,10 @@ int	ft_surveil_napkin_odd(t_sveil *surveil, int type)
 	return (0);
 }
 
-void	ft_distribue_ret_napkin(
+void	ft_distribute_ret_napkin(
 			t_sveil *surveil, int type, int num)
 {
 	int		i;
-	sem_t	*napkin_addr;
 
 	if (type == E_LAST)
 	{
@@ -93,21 +92,17 @@ void	ft_distribue_ret_napkin(
 	}
 	else
 	{
-		if (type == E_ODD)
-			napkin_addr = surveil->ipc_sems->napkin_odd;
-		else
-			napkin_addr = surveil->ipc_sems->napkin_even;
 		i = 0;
 		while (i < num)
 		{
-			sem_post(napkin_addr);
+			sem_post(surveil->ipc_sems->napkin_half);
 			i++;
 		}
 		ft_usleep(surveil->time_to_eat * (1000 / 2));
 		i--;
 		while (i > 0)
 		{
-			sem_wait(napkin_addr);
+			sem_wait(surveil->ipc_sems->napkin_half);
 			i--;
 		}
 	}

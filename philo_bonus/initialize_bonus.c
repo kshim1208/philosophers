@@ -6,7 +6,7 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/15 07:36:01 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/28 15:27:10 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/29 08:52:44 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,18 +69,16 @@ int	ft_open_semas(t_sveil *surveil)
 	surveil->ipc_sems->done = ft_philo_sem_open("ft_philo_done", 1);
 	surveil->ipc_sems->forks
 		= ft_philo_sem_open("ft_philo_forks", surveil->philo_num);
-	surveil->ipc_sems->napkin_odd
-		= ft_philo_sem_open("ft_philo_nap_odd", 0);
-	surveil->ipc_sems->napkin_even
-		= ft_philo_sem_open("ft_philo_nap_even", 0);
+	surveil->ipc_sems->napkin_half
+		= ft_philo_sem_open("ft_philo_nap_half", 0);
 	surveil->ipc_sems->print = ft_philo_sem_open("ft_philo_print", 1);
 	surveil->ipc_sems->philo_done_eat
 		= ft_philo_sem_open("ft_philo_philo_done_eat", 0);
 	surveil->ipc_sems->last_eat
 		= ft_philo_sem_open("ft_philo_last_eat", 1);
 	if (surveil->ipc_sems->start_eat == 0 || surveil->ipc_sems->done == 0
-		|| surveil->ipc_sems->forks == 0 || surveil->ipc_sems->napkin_odd == 0
-		|| surveil->ipc_sems->napkin_even == 0 || surveil->ipc_sems->print == 0
+		|| surveil->ipc_sems->forks == 0 || surveil->ipc_sems->napkin_half == 0
+		|| surveil->ipc_sems->print == 0
 		|| surveil->ipc_sems->philo_done_eat == 0
 		|| surveil->ipc_sems->last_eat == 0)
 		return (1);
