@@ -6,7 +6,7 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/14 16:54:31 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/29 13:31:09 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/29 15:08:57 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ int	main(int argc, char **argv)
 		exit(1);
 	if (ft_open_semas(prg.surveil) != 0)
 		exit(1);
-	// semaphore 에러의 경우 이미 생성된 세마포어 정리하는 부분 필요함.
 	if (ft_phiosophers_start(&prg, prg.philo, prg.surveil) != 0)
 		exit(1);
 	return (0);

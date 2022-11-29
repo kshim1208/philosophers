@@ -6,7 +6,7 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/22 16:41:56 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/29 14:52:39 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/29 15:08:09 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,10 +31,16 @@ int	ft_surveil_napkin(t_sveil *surveil)
 
 int	ft_surveil_napkin_even(t_sveil *surveil, int type)
 {
+	sem_t	*nap_type;
+
 	while (1)
 	{
+		if (type == E_ODD)
+			nap_type = surveil->ipc_sems->napkin_odd;
+		else
+			nap_type = surveil->ipc_sems->napkin_even;
 		ft_distribute_ret_napkin(
-			surveil, type, surveil->half_num);
+			surveil, type, nap_type, surveil->half_num);
 		if (type == E_ODD)
 			type = E_EVEN;
 		else if (type == E_EVEN)
@@ -45,10 +51,16 @@ int	ft_surveil_napkin_even(t_sveil *surveil, int type)
 
 int	ft_surveil_napkin_odd(t_sveil *surveil, int type)
 {
+	sem_t	*nap_type;
+
 	while (1)
 	{
+		if (type == E_ODD)
+			nap_type = surveil->ipc_sems->napkin_odd;
+		else
+			nap_type = surveil->ipc_sems->napkin_even;
 		ft_distribute_ret_napkin(
-			surveil, type, surveil->half_num);
+			surveil, type, nap_type, surveil->half_num);
 		if (type == E_LAST)
 			type = E_ODD;
 		else
@@ -58,10 +70,9 @@ int	ft_surveil_napkin_odd(t_sveil *surveil, int type)
 }
 
 void	ft_distribute_ret_napkin(
-			t_sveil *surveil, int type, int num)
+			t_sveil *surveil, int type, sem_t *nap_type, int num)
 {
 	int		i;
-	sem_t	*nap_type;
 
 	if (type == E_LAST)
 	{
@@ -71,10 +82,6 @@ void	ft_distribute_ret_napkin(
 	}
 	else
 	{
-		if (type == E_ODD)
-			nap_type = surveil->ipc_sems->napkin_odd;
-		else
-			nap_type = surveil->ipc_sems->napkin_even;
 		i = 0;
 		while (i < num)
 		{

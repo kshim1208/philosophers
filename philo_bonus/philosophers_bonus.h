@@ -6,7 +6,7 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/14 16:56:00 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/29 15:00:40 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/29 15:08:29 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,10 +124,12 @@ int			ft_surveil_napkin(t_sveil *surveil);
 int			ft_surveil_napkin_even(t_sveil *surveil, int type);
 int			ft_surveil_napkin_odd(t_sveil *surveil, int type);
 void		ft_distribute_ret_napkin(
-				t_sveil *surveil, int type, int num);
+				t_sveil *surveil, int type, sem_t *nap_type, int num);
 void		ft_surveil_napkin_set(t_sveil *surveil, int set_mode);
 
 void		ft_fork_philo(t_philo *philo, t_sveil *surveil, int i);
+void		ft_philo_set_before_routine(
+				t_philo *philo, t_sveil *surveil, int i);
 void		ft_fork_napkin_done_eat(t_sveil *surveil);
 void		ft_kill_pid_array(t_sveil *surveil);
 void		ft_exit_after_unlink_sem(t_sveil *surveil);
