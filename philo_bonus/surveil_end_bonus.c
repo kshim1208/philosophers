@@ -6,7 +6,7 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/22 16:41:47 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/29 11:01:17 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/29 11:17:15 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,10 +55,8 @@ int	ft_surveil_end_last_eat(t_philo *philo, t_sveil *surveil)
 		if (printf("%llu %d died\n", ft_set_timestamp(philo) / 1000,
 				philo->number) == -1)
 		{
-			// sem_post(surveil->ipc_sems->print);
 			exit(1);
 		}
-		// sem_post(surveil->ipc_sems->print);
 		exit(0);
 	}
 	sem_post(surveil->ipc_sems->last_eat);

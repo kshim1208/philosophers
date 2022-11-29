@@ -6,7 +6,7 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/22 16:57:16 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/29 11:08:00 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/29 11:25:39 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,11 +39,6 @@ int	ft_finish_philosophers(t_prg *prg, t_sveil *surveil)
 	int	ret_pid;
 
 	ret_pid = waitpid(-1, 0, 0);
-
-	sem_wait(surveil->ipc_sems->done);
-	surveil->stop = 1;
-	sem_post(surveil->ipc_sems->done);
-	
 	i = 0;
 	while (i < surveil->philo_num)
 	{
@@ -62,7 +57,7 @@ int	ft_finish_philosophers(t_prg *prg, t_sveil *surveil)
 		}
 		i++;
 	}
-	printf("cccc\n");
+
 	kill(surveil->surveil_napkin, SIGTERM);
 	waitpid(surveil->surveil_napkin, 0, 0);
 	if (surveil->number_to_eat > 0)

@@ -6,7 +6,7 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/22 16:41:56 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/29 10:21:05 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/29 11:20:02 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,22 +35,12 @@ int	ft_surveil_napkin_even(t_sveil *surveil, int type)
 {
 	while (1)
 	{
-		sem_wait(surveil->ipc_sems->done);
-		if (surveil->stop != 1)
-		{
-			sem_post(surveil->ipc_sems->done);
-			ft_distribute_ret_napkin(
-				surveil, type, surveil->half_num);
-			if (type == E_ODD)
-				type = E_EVEN;
-			else if (type == E_EVEN)
-				type = E_ODD;
-		}
-		else
-		{
-			sem_post(surveil->ipc_sems->done);
-			break ;
-		}
+		ft_distribute_ret_napkin(
+			surveil, type, surveil->half_num);
+		if (type == E_ODD)
+			type = E_EVEN;
+		else if (type == E_EVEN)
+			type = E_ODD;
 	}
 	return (0);
 }
@@ -59,22 +49,12 @@ int	ft_surveil_napkin_odd(t_sveil *surveil, int type)
 {
 	while (1)
 	{
-		sem_wait(surveil->ipc_sems->done);
-		if (surveil->stop != 1)
-		{
-			sem_post(surveil->ipc_sems->done);
-			ft_distribute_ret_napkin(
-				surveil, type, surveil->half_num);
-			if (type == E_LAST)
-				type = E_ODD;
-			else
-				type++;
-		}
+		ft_distribute_ret_napkin(
+			surveil, type, surveil->half_num);
+		if (type == E_LAST)
+			type = E_ODD;
 		else
-		{
-			sem_post(surveil->ipc_sems->done);
-			break ;
-		}
+			type++;
 	}
 	return (0);
 }
@@ -104,7 +84,6 @@ void	ft_distribute_ret_napkin(
 			i++;
 		}
 		ft_usleep(surveil->time_to_eat * (1000 / 2));
-		i--;
 		while (i > 0)
 		{
 			sem_wait(nap_type);
