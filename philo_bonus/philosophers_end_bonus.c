@@ -6,7 +6,7 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/22 16:57:16 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/29 09:25:24 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/29 11:08:00 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,8 @@ int	ft_surveil_end_philo_done_eat(t_sveil *surveil)
 		sem_wait(surveil->ipc_sems->philo_done_eat);
 		i++;
 	}
-	// 이후 종료 동작은?
-		// finish랑 중복되는 부분 있는 것 같음. 동작 정리해보자.
+	sem_wait(surveil->ipc_sems->print);
+	kill(surveil->pid_array[0], SIGTERM);
 	return (0);
 }
 
@@ -39,9 +39,11 @@ int	ft_finish_philosophers(t_prg *prg, t_sveil *surveil)
 	int	ret_pid;
 
 	ret_pid = waitpid(-1, 0, 0);
+
 	sem_wait(surveil->ipc_sems->done);
 	surveil->stop = 1;
 	sem_post(surveil->ipc_sems->done);
+	
 	i = 0;
 	while (i < surveil->philo_num)
 	{
@@ -60,8 +62,9 @@ int	ft_finish_philosophers(t_prg *prg, t_sveil *surveil)
 		}
 		i++;
 	}
-	
-	pthread_join(surveil->surveil_napkin, 0);
+	printf("cccc\n");
+	kill(surveil->surveil_napkin, SIGTERM);
+	waitpid(surveil->surveil_napkin, 0, 0);
 	if (surveil->number_to_eat > 0)
 		pthread_join(surveil->surveil_done_eat, 0);
 	if (surveil->philo_num % 2 == 1)
@@ -73,7 +76,8 @@ int	ft_finish_philosophers(t_prg *prg, t_sveil *surveil)
 	sem_close(surveil->ipc_sems->start_eat);
 	sem_close(surveil->ipc_sems->done);
 	sem_close(surveil->ipc_sems->forks);
-	sem_close(surveil->ipc_sems->napkin_half);
+	sem_close(surveil->ipc_sems->napkin_odd);
+	sem_close(surveil->ipc_sems->napkin_even);
 	sem_close(surveil->ipc_sems->print);
 	sem_close(surveil->ipc_sems->philo_done_eat);
 	sem_close(surveil->ipc_sems->last_eat);
@@ -81,7 +85,8 @@ int	ft_finish_philosophers(t_prg *prg, t_sveil *surveil)
 	sem_unlink("ft_philo_start_eat");
 	sem_unlink("ft_philo_done");
 	sem_unlink("ft_philo_forks");
-	sem_unlink("ft_philo_nap_half");
+	sem_unlink("ft_philo_nap_odd");
+	sem_unlink("ft_philo_nap_even");
 	sem_unlink("ft_philo_print");
 	sem_unlink("ft_philo_philo_done_eat");
 	sem_unlink("ft_philo_last_eat");

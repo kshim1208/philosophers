@@ -6,7 +6,7 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/22 16:41:56 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/29 10:07:52 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/29 10:21:05 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,7 @@ void	ft_distribute_ret_napkin(
 			t_sveil *surveil, int type, int num)
 {
 	int		i;
+	sem_t	*nap_type;
 
 	if (type == E_LAST)
 	{
@@ -92,17 +93,21 @@ void	ft_distribute_ret_napkin(
 	}
 	else
 	{
+		if (type == E_ODD)
+			nap_type = surveil->ipc_sems->napkin_odd;
+		else
+			nap_type = surveil->ipc_sems->napkin_even;
 		i = 0;
 		while (i < num)
 		{
-			sem_post(surveil->ipc_sems->napkin_half);
+			sem_post(nap_type);
 			i++;
 		}
 		ft_usleep(surveil->time_to_eat * (1000 / 2));
 		i--;
 		while (i > 0)
 		{
-			sem_wait(surveil->ipc_sems->napkin_half);
+			sem_wait(nap_type);
 			i--;
 		}
 	}

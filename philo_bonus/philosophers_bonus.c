@@ -6,7 +6,7 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/15 07:53:02 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/29 09:13:15 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/29 10:18:23 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,12 @@ int	ft_phiosophers_start(t_prg *prg, t_philo *philo, t_sveil *surveil)
 		}
 		i++;
 	}
-	pthread_create(&(surveil->surveil_napkin), 0,
-		(void *)ft_surveil_napkin, (void *)surveil);
+	surveil->surveil_napkin = fork();
+	if (surveil->surveil_napkin == 0)
+	{
+		ft_surveil_napkin(surveil);
+		return (0);
+	}
 	i = 0;
 	while (i < surveil->philo_num)
 	{
@@ -59,8 +63,10 @@ int	ft_philo_routine(t_philo *philo, t_sveil *surveil)
 		(void *)ft_surveil_end, (void *)philo);
 	if ((philo->number == surveil->philo_num) && (philo->number % 2 == 1))
 		philo->napkin = surveil->ipc_sems->napkin_last;
+	else if (philo->number % 2 == 0)
+		philo->napkin = surveil->ipc_sems->napkin_even;
 	else
-		philo->napkin = surveil->ipc_sems->napkin_half;
+		philo->napkin = surveil->ipc_sems->napkin_odd;
 	sem_wait(surveil->ipc_sems->start_eat);
 	while (1)
 	{

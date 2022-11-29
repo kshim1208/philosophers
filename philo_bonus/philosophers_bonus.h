@@ -6,7 +6,7 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/14 16:56:00 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/29 10:07:57 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/29 10:20:57 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,8 @@ typedef struct s_interprocess_semaphores{
 	sem_t			*start_eat;
 	sem_t			*done;
 	sem_t			*forks;
-	sem_t			*napkin_half;
+	sem_t			*napkin_odd;
+	sem_t			*napkin_even;
 	sem_t			*napkin_last;
 	sem_t			*print;
 	sem_t			*philo_done_eat;
@@ -57,7 +58,7 @@ typedef struct s_surveil{
 	uint64_t		time_to_die_micro;
 	int				number_to_eat;
 	uint64_t		start_time;
-	pthread_t		surveil_napkin;
+	int				surveil_napkin;
 	pthread_t		surveil_done_eat;
 	t_ipc_sem		*ipc_sems;
 	int				*pid_array;

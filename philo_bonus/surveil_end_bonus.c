@@ -6,7 +6,7 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/22 16:41:47 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/29 08:29:23 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/29 11:01:17 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 #include <stdio.h>
 
 #include "./philosophers_bonus.h"
+
+#include <signal.h>
 
 int	ft_surveil_end(t_philo *philo)
 {
@@ -28,12 +30,12 @@ int	ft_surveil_end(t_philo *philo)
 		{
 			sem_post(surveil->ipc_sems->done);
 			if (ft_surveil_end_last_eat(philo, surveil) != 0)
-				return (1);
+				exit(1);
 		}
 		else
 		{
 			sem_post(surveil->ipc_sems->done);
-			break ;
+			exit(0);
 		}
 	}
 	return (0);
@@ -53,11 +55,11 @@ int	ft_surveil_end_last_eat(t_philo *philo, t_sveil *surveil)
 		if (printf("%llu %d died\n", ft_set_timestamp(philo) / 1000,
 				philo->number) == -1)
 		{
-			sem_post(surveil->ipc_sems->print);
-			return (1);
+			// sem_post(surveil->ipc_sems->print);
+			exit(1);
 		}
-		sem_post(surveil->ipc_sems->print);
-		return (1);
+		// sem_post(surveil->ipc_sems->print);
+		exit(0);
 	}
 	sem_post(surveil->ipc_sems->last_eat);
 	return (0);
