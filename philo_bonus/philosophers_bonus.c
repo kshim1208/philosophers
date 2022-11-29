@@ -6,7 +6,7 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/15 07:53:02 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/29 13:05:00 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/29 14:03:32 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,12 +29,13 @@ int	ft_phiosophers_start(t_prg *prg, t_philo *philo, t_sveil *surveil)
 		surveil->pid_array[i] = fork();
 		if (surveil->pid_array[i] == -1)
 		{
-			// fork_예외처리
+			//ft_kill_pid_array(surveil);
+			ft_exit_after_unlink_sem(surveil);
 		}
 		else if (surveil->pid_array[i] == 0)
 		{
 			ft_philo_routine(philo, surveil);
-			return (0);
+			exit (0);
 		}
 		i++;
 	}
@@ -42,11 +43,12 @@ int	ft_phiosophers_start(t_prg *prg, t_philo *philo, t_sveil *surveil)
 	if (surveil->surveil_napkin == 0)
 	{
 		ft_surveil_napkin(surveil);
-		return (0);
+		exit (0);
 	}
 	else if (surveil->surveil_napkin < 0)
 	{
-		// 예외 처리
+		//ft_kill_pid_array(surveil);
+		ft_exit_after_unlink_sem(surveil);
 	}
 	if (surveil->number_to_eat > 0)
 	{
@@ -54,11 +56,13 @@ int	ft_phiosophers_start(t_prg *prg, t_philo *philo, t_sveil *surveil)
 		if (surveil->surveil_done_eat == 0)
 		{
 			ft_surveil_done_eat(surveil);
-			return (0);
+			exit (0);
 		}
 		else if (surveil->surveil_done_eat < 0)
 		{
-			// 예외 처리
+			//ft_kill_pid_array(surveil);
+			//ft_kill_napkin(surveil);
+			ft_exit_after_unlink_sem(surveil);
 		}
 	}
 	i = 0;

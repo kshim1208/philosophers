@@ -6,12 +6,13 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/15 10:31:05 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/29 13:05:06 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/29 13:53:02 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <unistd.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 #include "./philosophers_bonus.h"
 
@@ -114,4 +115,29 @@ int	ft_usleep(uint64_t sleep_time)
 		}
 	}
 	return (0);
+}
+
+void	ft_philo_sem_name_array(t_sveil *surveil)
+{
+	surveil->max_sem_name = 10;
+	surveil->sem_name_arr = (char **)malloc(sizeof(char *) * 10);
+	if (surveil->sem_name_arr == 0)
+		exit(1);
+	surveil->sem_name_arr[E_START_EAT] = "ft_philo_start_eat";
+	surveil->sem_name_arr[E_DONE] = "ft_philo_done";
+	surveil->sem_name_arr[E_FORKS] = "ft_philo_forks";
+	surveil->sem_name_arr[E_NAP_ODD] = "ft_philo_nap_odd";
+	surveil->sem_name_arr[E_NAP_EVEN] = "ft_philo_nap_even";
+	surveil->sem_name_arr[E_PRINT] = "ft_philo_print";
+	surveil->sem_name_arr[E_DONE_EAT] = "ft_philo_philo_done_eat";
+	surveil->sem_name_arr[E_LAST_EAT] = "ft_philo_last_eat";
+	surveil->sem_name_arr[E_FINISH] = "ft_philo_finish";
+	surveil->sem_name_arr[E_NAP_LAST] = "ft_philo_nap_last";
+	return ;
+}
+
+void	ft_exit_after_unlink_sem(t_sveil *surveil)
+{
+	ft_sem_close_unlink(surveil);
+	exit(1);
 }

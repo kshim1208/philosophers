@@ -6,7 +6,7 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/14 16:56:00 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/28 10:03:01 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/29 10:08:01 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,11 +102,13 @@ uint64_t	ft_set_time_after_last_eat(t_philo *philo);
 int			ft_surveil_end(t_prg *prg);
 int			ft_surveil_end_last_eat(t_philo *philo_arr, t_sveil *surveil);
 
-int			ft_surveil_eat(t_philo *philo_arr, t_sveil *surveil);
-int			ft_surveil_eat_even(t_philo *philo_arr, t_sveil *surveil, int type);
-int			ft_surveil_eat_odd(t_philo *philo_arr, t_sveil *surveil, int type);
-void		ft_distribue_ret_napkin(t_philo *philo_arr,
+int			ft_surveil_napkin(t_philo *philo_arr, t_sveil *surveil);
+int			ft_surveil_napkin_even(
+				t_philo *philo_arr, t_sveil *surveil, int type);
+int			ft_surveil_napkin_odd(
+				t_philo *philo_arr, t_sveil *surveil, int type);
+void		ft_distribute_ret_napkin(t_philo *philo_arr,
 				t_sveil *surveil, int type, int philo_num);
-void		ft_surveil_eat_set_napkin(t_sveil *surveil, int set_mode);
+void		ft_surveil_napkin_set(t_sveil *surveil, int set_mode);
 
 #endif

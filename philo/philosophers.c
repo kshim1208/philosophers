@@ -6,7 +6,7 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/15 07:53:02 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/28 09:50:54 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/28 13:30:51 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	ft_phiosophers_start(t_prg *prg, t_philo *philo_arr, t_sveil *surveil)
 	surveil->start_time = ft_set_now_micro_s();
 	pthread_create(&(surveil->surveil_end), 0,
 		(void *)ft_surveil_end, (void *)prg);
-	ft_surveil_eat_set_napkin(surveil, E_LOCK);
+	ft_surveil_napkin_set(surveil, E_LOCK);
 	if (surveil->philo_num == 1)
 		pthread_create(&(philo_arr[0].tid), 0,
 			(void *)ft_philo_routine_only_one, (void *)&(philo_arr[0]));
@@ -35,7 +35,7 @@ int	ft_phiosophers_start(t_prg *prg, t_philo *philo_arr, t_sveil *surveil)
 			i++;
 		}
 	}
-	ft_surveil_eat(philo_arr, surveil);
+	ft_surveil_napkin(philo_arr, surveil);
 	ft_finish_philosophers(prg);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/22 16:41:47 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/28 10:06:29 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/28 14:18:30 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,11 +52,11 @@ int	ft_surveil_end_last_eat(t_philo *philo_arr, t_sveil *surveil)
 		if (ft_set_time_after_last_eat(
 				&(philo_arr[i])) >= (uint64_t)surveil->time_to_die_micro)
 		{
+			pthread_mutex_lock(surveil->print);
 			pthread_mutex_unlock(philo_arr[i].last_eat);
 			pthread_mutex_lock(surveil->done);
 			surveil->stop = 1;
 			pthread_mutex_unlock(surveil->done);
-			pthread_mutex_lock(surveil->print);
 			if (printf("%llu %d died\n",
 					ft_set_timestamp(&(philo_arr[i])) / 1000,
 					philo_arr[i].number) == -1)

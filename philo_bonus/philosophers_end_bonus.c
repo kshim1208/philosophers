@@ -6,7 +6,7 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/22 16:57:16 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/29 13:05:45 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/29 13:52:32 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,21 @@
 
 int	ft_finish_philosophers(t_prg *prg, t_sveil *surveil)
 {
-	int	i;
 	int	ret_pid;
 
 	ret_pid = waitpid(-1, 0, 0);
+	ft_philo_end_wait_kill(surveil, ret_pid);
+	ft_sem_close_unlink(surveil);
+	free(surveil->ipc_sems);
+	free(prg->philo);
+	free(prg->surveil);
+	return (0);
+}
+
+int	ft_philo_end_wait_kill(t_sveil *surveil, int ret_pid)
+{
+	int	i;
+
 	if (surveil->number_to_eat != -1
 		&& ret_pid != surveil->surveil_done_eat)
 		kill(surveil->surveil_done_eat, SIGTERM);
@@ -45,12 +56,16 @@ int	ft_finish_philosophers(t_prg *prg, t_sveil *surveil)
 	waitpid(surveil->surveil_napkin, 0, 0);
 	if (surveil->number_to_eat > 0)
 		waitpid(surveil->surveil_done_eat, 0, 0);
+	return (0);
+}
+
+int	ft_sem_close_unlink(t_sveil *surveil)
+{
 	if (surveil->philo_num % 2 == 1)
 	{
 		sem_close(surveil->ipc_sems->napkin_last);
-		sem_unlink("ft_philo_nap_last");
+		sem_unlink(surveil->sem_name_arr[E_NAP_LAST]);
 	}
-
 	sem_close(surveil->ipc_sems->start_eat);
 	sem_close(surveil->ipc_sems->done);
 	sem_close(surveil->ipc_sems->forks);
@@ -60,19 +75,14 @@ int	ft_finish_philosophers(t_prg *prg, t_sveil *surveil)
 	sem_close(surveil->ipc_sems->philo_done_eat);
 	sem_close(surveil->ipc_sems->last_eat);
 	sem_close(surveil->ipc_sems->finish);
-
-	sem_unlink("ft_philo_start_eat");
-	sem_unlink("ft_philo_done");
-	sem_unlink("ft_philo_forks");
-	sem_unlink("ft_philo_nap_odd");
-	sem_unlink("ft_philo_nap_even");
-	sem_unlink("ft_philo_print");
-	sem_unlink("ft_philo_philo_done_eat");
-	sem_unlink("ft_philo_last_eat");
-	sem_unlink("ft_philo_finish");
-
-	free(surveil->ipc_sems);
-	free(prg->philo);
-	free(prg->surveil);
+	sem_unlink(surveil->sem_name_arr[E_START_EAT]);
+	sem_unlink(surveil->sem_name_arr[E_DONE]);
+	sem_unlink(surveil->sem_name_arr[E_FORKS]);
+	sem_unlink(surveil->sem_name_arr[E_NAP_ODD]);
+	sem_unlink(surveil->sem_name_arr[E_NAP_EVEN]);
+	sem_unlink(surveil->sem_name_arr[E_PRINT]);
+	sem_unlink(surveil->sem_name_arr[E_DONE_EAT]);
+	sem_unlink(surveil->sem_name_arr[E_LAST_EAT]);
+	sem_unlink(surveil->sem_name_arr[E_FINISH]);
 	return (0);
 }

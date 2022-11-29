@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   surveil_eat.c                                      :+:      :+:    :+:   */
+/*   surveil_napkin.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/22 16:41:56 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/28 07:47:58 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/29 10:08:10 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 
 #include "./philosophers.h"
 
-int	ft_surveil_eat(t_philo *philo_arr, t_sveil *surveil)
+int	ft_surveil_napkin(t_philo *philo_arr, t_sveil *surveil)
 {
 	int		type;
 
@@ -24,14 +24,14 @@ int	ft_surveil_eat(t_philo *philo_arr, t_sveil *surveil)
 	if (surveil->philo_num == 1)
 		type = E_LAST;
 	if (surveil->philo_num % 2 == 0)
-		ft_surveil_eat_even(philo_arr, surveil, type);
+		ft_surveil_napkin_even(philo_arr, surveil, type);
 	else
-		ft_surveil_eat_odd(philo_arr, surveil, type);
-	ft_surveil_eat_set_napkin(surveil, E_UNLOCK);
+		ft_surveil_napkin_odd(philo_arr, surveil, type);
+	ft_surveil_napkin_set(surveil, E_UNLOCK);
 	return (0);
 }
 
-int	ft_surveil_eat_even(t_philo *philo_arr, t_sveil *surveil, int type)
+int	ft_surveil_napkin_even(t_philo *philo_arr, t_sveil *surveil, int type)
 {
 	while (1)
 	{
@@ -39,7 +39,7 @@ int	ft_surveil_eat_even(t_philo *philo_arr, t_sveil *surveil, int type)
 		if (surveil->stop != 1)
 		{
 			pthread_mutex_unlock(surveil->done);
-			ft_distribue_ret_napkin(
+			ft_distribute_ret_napkin(
 				philo_arr, surveil, type, surveil->philo_num);
 			if (type == E_ODD)
 				type = E_EVEN;
@@ -55,7 +55,7 @@ int	ft_surveil_eat_even(t_philo *philo_arr, t_sveil *surveil, int type)
 	return (0);
 }
 
-int	ft_surveil_eat_odd(t_philo *philo_arr, t_sveil *surveil, int type)
+int	ft_surveil_napkin_odd(t_philo *philo_arr, t_sveil *surveil, int type)
 {
 	while (1)
 	{
@@ -63,7 +63,7 @@ int	ft_surveil_eat_odd(t_philo *philo_arr, t_sveil *surveil, int type)
 		if (surveil->stop != 1)
 		{
 			pthread_mutex_unlock(surveil->done);
-			ft_distribue_ret_napkin(
+			ft_distribute_ret_napkin(
 				philo_arr, surveil, type, (surveil->philo_num) - 1);
 			if (type == E_LAST)
 				type = E_ODD;
@@ -79,7 +79,7 @@ int	ft_surveil_eat_odd(t_philo *philo_arr, t_sveil *surveil, int type)
 	return (0);
 }
 
-void	ft_distribue_ret_napkin(t_philo *philo_arr,
+void	ft_distribute_ret_napkin(t_philo *philo_arr,
 			t_sveil *surveil, int type, int philo_num)
 {
 	int	i;
@@ -109,7 +109,7 @@ void	ft_distribue_ret_napkin(t_philo *philo_arr,
 	return ;
 }
 
-void	ft_surveil_eat_set_napkin(t_sveil *surveil, int set_mode)
+void	ft_surveil_napkin_set(t_sveil *surveil, int set_mode)
 {
 	int	i;
 

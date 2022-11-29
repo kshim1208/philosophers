@@ -6,13 +6,11 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/14 16:54:31 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/24 09:05:05 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/29 08:24:55 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./philosophers.h"
-
-#include <stdlib.h>
 
 int	main(int argc, char **argv)
 {
