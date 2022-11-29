@@ -6,7 +6,7 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/15 10:31:05 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/28 15:30:47 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/29 12:29:10 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ int	ft_philo_routine_only_one(t_philo *philo)
 	{
 		sem_wait(philo->napkin);
 		sem_wait(philo->surveil->ipc_sems->forks);
-		if (ft_print_with_mutex(philo, philo->surveil, "has taken a fork") != 0)
+		if (ft_print_with_sema(philo, philo->surveil, "has taken a fork") != 0)
 		{
 			sem_post(philo->surveil->ipc_sems->forks);
 			return (1);
@@ -69,7 +69,7 @@ int	ft_philo_routine_only_one(t_philo *philo)
 	return (0);
 }
 
-int	ft_print_with_mutex(t_philo *philo, t_sveil *surveil, char *str)
+int	ft_print_with_sema(t_philo *philo, t_sveil *surveil, char *str)
 {
 	sem_wait(surveil->ipc_sems->print);
 	sem_wait(surveil->ipc_sems->done);

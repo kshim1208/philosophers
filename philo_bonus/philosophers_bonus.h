@@ -6,7 +6,7 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/14 16:56:00 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/29 10:20:57 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/29 12:31:55 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,11 +31,6 @@ typedef enum e_lock_unlock_napkin{
 	E_UNLOCK
 }			t_l_u_lock_napkin;
 
-typedef enum e_fork_state{
-	E_DROP = 0,
-	E_HOLD
-}			t_fork_state;
-
 typedef struct s_interprocess_semaphores{
 	sem_t			*start_eat;
 	sem_t			*done;
@@ -46,6 +41,7 @@ typedef struct s_interprocess_semaphores{
 	sem_t			*print;
 	sem_t			*philo_done_eat;
 	sem_t			*last_eat;
+	sem_t			*finish;
 }			t_ipc_sem;
 
 typedef struct s_surveil{
@@ -59,7 +55,7 @@ typedef struct s_surveil{
 	int				number_to_eat;
 	uint64_t		start_time;
 	int				surveil_napkin;
-	pthread_t		surveil_done_eat;
+	int				surveil_done_eat;
 	t_ipc_sem		*ipc_sems;
 	int				*pid_array;
 }			t_sveil;
@@ -90,12 +86,12 @@ int			ft_philo_eat(t_philo *philo, t_sveil *surveil);
 int			ft_philo_after_eat(t_philo *philo, t_sveil *surveil);
 int			ft_philo_sleep_think(t_philo *philo, t_sveil *surveil);
 
-int			ft_surveil_end_philo_done_eat(t_sveil *surveil);
+int			ft_surveil_done_eat(t_sveil *surveil);
 int			ft_finish_philosophers(t_prg *prg, t_sveil *surveil);
 
 int			ft_atoi(const char *str);
 int			ft_philo_routine_only_one(t_philo *philo);
-int			ft_print_with_mutex(t_philo *philo, t_sveil *surveil, char *str);
+int			ft_print_with_sema(t_philo *philo, t_sveil *surveil, char *str);
 int			ft_usleep(uint64_t sleep_time);
 
 uint64_t	ft_set_now_micro_s(void);

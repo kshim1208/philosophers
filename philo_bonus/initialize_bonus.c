@@ -6,7 +6,7 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/15 07:36:01 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/29 10:19:16 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/29 12:50:39 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 #include "./philosophers_bonus.h"
 
+// 최대 필로소퍼 수 제한 두는게 맞을까? 200명으로?
 int	ft_init_surveil_argument(int argc, char **argv, t_prg *prg)
 {
 	memset(prg, 0, sizeof(t_prg));
@@ -78,11 +79,13 @@ int	ft_open_semas(t_sveil *surveil)
 		= ft_philo_sem_open("ft_philo_philo_done_eat", 0);
 	surveil->ipc_sems->last_eat
 		= ft_philo_sem_open("ft_philo_last_eat", 1);
+	surveil->ipc_sems->finish
+		= ft_philo_sem_open("ft_philo_finish", 1);
 	if (surveil->ipc_sems->start_eat == 0 || surveil->ipc_sems->done == 0
 		|| surveil->ipc_sems->forks == 0 || surveil->ipc_sems->napkin_odd == 0
 		|| surveil->ipc_sems->napkin_even == 0 || surveil->ipc_sems->print == 0
 		|| surveil->ipc_sems->philo_done_eat == 0
-		|| surveil->ipc_sems->last_eat == 0)
+		|| surveil->ipc_sems->last_eat == 0 || surveil->ipc_sems->finish == 0)
 		return (1);
 	if (surveil->philo_num % 2 == 1)
 	{
