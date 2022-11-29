@@ -6,7 +6,7 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/22 16:57:16 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/29 12:46:28 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/29 13:05:45 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,21 +17,6 @@
 #include "./philosophers_bonus.h"
 
 #include <stdio.h>
-
-int	ft_surveil_done_eat(t_sveil *surveil)
-{
-	int	i;
-
-	i = 0;
-	while (i < surveil->philo_num)
-	{
-		sem_wait(surveil->ipc_sems->philo_done_eat);
-		i++;
-	}
-	sem_wait(surveil->ipc_sems->print);
-	sem_wait(surveil->ipc_sems->finish);
-	exit(0);
-}
 
 int	ft_finish_philosophers(t_prg *prg, t_sveil *surveil)
 {

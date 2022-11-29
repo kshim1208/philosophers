@@ -6,7 +6,7 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/14 16:56:00 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/29 12:31:55 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/29 13:06:59 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,14 +33,14 @@ typedef enum e_lock_unlock_napkin{
 
 typedef struct s_interprocess_semaphores{
 	sem_t			*start_eat;
-	sem_t			*done;
+	sem_t			*done_arr;
+	sem_t			*last_eat_arr;
 	sem_t			*forks;
 	sem_t			*napkin_odd;
 	sem_t			*napkin_even;
 	sem_t			*napkin_last;
 	sem_t			*print;
 	sem_t			*philo_done_eat;
-	sem_t			*last_eat;
 	sem_t			*finish;
 }			t_ipc_sem;
 
@@ -66,6 +66,8 @@ typedef struct s_philosopher{
 	uint64_t		last_eat_time;
 	int				number_of_eat;
 	sem_t			*napkin;
+	sem_t			*done;
+	sem_t			*last_eat;
 	t_sveil			*surveil;
 }			t_philo;
 
