@@ -6,13 +6,14 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/29 14:49:57 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/30 17:24:17 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/30 17:33:13 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <unistd.h>
 #include <stdlib.h>
 #include <signal.h>
+#include <sys/wait.h>
 
 #include "./philosophers_bonus.h"
 

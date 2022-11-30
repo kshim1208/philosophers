@@ -1,11 +1,11 @@
+.DEFAULT_GOAL := all
+
 NAME = philo
 
 CC = cc
 CFLAGS = -Wall -Wextra -Werror
 
-
-DEBUS = -g
-
+DEPENDENCY = -MMD -MP
 
 RM = rm
 RMFLAGS = -f
@@ -16,14 +16,18 @@ SRCS = $(SRC_FILES)
 
 OBJS = $(SRCS:.c=.o)
 
+DEPS = $(SRCS:.c=.d)
+
+-include $(DEPS) 
+
 
 all : $(NAME)
 
 $(NAME): $(OBJS) $(DEPS)
-	$(CC) $(CFLAGS)        $(DEBUG)       $(OBJS) -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
 
 %.o : %.c
-	$(CC) $(CFLAGS)        $(DEBUG)       $(HEADERS) -c $< -o $@ 
+	$(CC) $(CFLAGS) $(DEPENDENCY) $(HEADERS) -c $< -o $@ 
 
 clean:
 	$(RM) $(RMFLAGS) $(OBJS) $(DEPS)
