@@ -6,7 +6,7 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/29 14:49:57 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/29 15:04:36 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/30 16:53:24 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ void	ft_philo_set_before_routine(t_philo *philo, t_sveil *surveil, int i)
 	philo->number = i + 1;
 	pthread_create(&(philo->surveil_end), 0,
 		(void *)ft_surveil_end, (void *)philo);
+	pthread_detach(philo->surveil_end);
 	if ((philo->number == surveil->philo_num)
 		&& (philo->number % 2 == 1))
 		philo->napkin = surveil->ipc_sems->napkin_last;

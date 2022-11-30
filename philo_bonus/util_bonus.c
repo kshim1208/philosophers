@@ -6,7 +6,7 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/15 10:31:05 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/29 14:57:31 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/30 16:44:22 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,6 @@ int	ft_print_with_sema(t_philo *philo, t_sveil *surveil, char *str)
 	else if (surveil->stop == 1)
 	{
 		sem_post(surveil->ipc_sems->done);
-		sem_post(surveil->ipc_sems->print);
 		return (1);
 	}
 	return (0);

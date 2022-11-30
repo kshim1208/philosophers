@@ -6,13 +6,14 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/22 16:57:16 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/30 13:38:54 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/30 16:45:26 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <unistd.h>
 #include <stdlib.h>
 #include <signal.h>
+#include <sys/wait.h>
 
 #include "./philosophers_bonus.h"
 
@@ -20,8 +21,11 @@
 
 int	ft_finish_philosophers(t_prg *prg, t_sveil *surveil)
 {
+	pid_t	ret_pid;
+
 	sem_wait(surveil->ipc_sems->finish);
-	ft_philo_end_wait_kill(surveil);
+	ret_pid = waitpid(-1, 0, 0);
+	ft_philo_end_wait_kill(surveil, ret_pid);
 	ft_sem_close_unlink(surveil);
 	free(surveil->ipc_sems);
 	free(surveil->pid_array);
@@ -31,28 +35,32 @@ int	ft_finish_philosophers(t_prg *prg, t_sveil *surveil)
 	return (0);
 }
 
-int	ft_philo_end_wait_kill(t_sveil *surveil)
+int	ft_philo_end_wait_kill(t_sveil *surveil, pid_t ret_pid)
 {
 	int	i;
 
-	if (surveil->number_to_eat != -1)
+	if (surveil->number_to_eat > 0
+		&& ret_pid != surveil->surveil_done_eat)
+	{
 		kill(surveil->surveil_done_eat, SIGTERM);
+		waitpid(surveil->surveil_done_eat, 0, 0);
+	}
 	i = 0;
 	while (i < surveil->philo_num)
 	{
-		kill(surveil->pid_array[i], SIGTERM);
+		if (ret_pid != surveil->pid_array[i])
+			kill(surveil->pid_array[i], SIGTERM);
 		i++;
 	}
 	i = 0;
 	while (i < surveil->philo_num)
 	{
-		waitpid(surveil->pid_array[i], 0, 0);
+		if (ret_pid != surveil->pid_array[i])
+			waitpid(surveil->pid_array[i], 0, 0);
 		i++;
 	}
 	kill(surveil->surveil_napkin, SIGTERM);
 	waitpid(surveil->surveil_napkin, 0, 0);
-	if (surveil->number_to_eat > 0)
-		waitpid(surveil->surveil_done_eat, 0, 0);
 	return (0);
 }
 

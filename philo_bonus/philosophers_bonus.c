@@ -6,7 +6,7 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/15 07:53:02 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/29 15:00:15 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/30 16:53:08 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,6 @@ int	ft_philo_routine(t_philo *philo, t_sveil *surveil)
 		}
 		sem_post(surveil->ipc_sems->done);
 	}
-	pthread_join(philo->surveil_end, 0);
 	exit(0);
 }
 

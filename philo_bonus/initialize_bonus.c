@@ -6,7 +6,7 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/15 07:36:01 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/30 13:36:29 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/30 16:10:31 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ int	ft_mem_alloc_philo_semas_pids(t_prg *prg)
 		exit(1);
 	memset(prg->philo, 0, sizeof(t_philo));
 	prg->surveil->pid_array
-		= (int *)malloc(sizeof(int) * prg->surveil->philo_num);
+		= (pid_t *)malloc(sizeof(pid_t) * prg->surveil->philo_num);
 	if (prg->surveil->pid_array == 0)
 		exit(1);
 	memset(prg->surveil->pid_array, 0, sizeof(int) * prg->surveil->philo_num);

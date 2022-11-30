@@ -6,7 +6,7 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/14 16:56:00 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/30 13:38:34 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/30 16:11:26 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ typedef struct s_surveil{
 	char			**sem_name_arr;
 	int				max_sem_name;
 	t_ipc_sem		*ipc_sems;
-	int				*pid_array;
+	pid_t			*pid_array;
 }			t_sveil;
 
 typedef struct s_philosopher{
@@ -104,7 +104,7 @@ int			ft_philo_sleep_think(t_philo *philo, t_sveil *surveil);
 
 int			ft_surveil_done_eat(t_sveil *surveil);
 int			ft_finish_philosophers(t_prg *prg, t_sveil *surveil);
-int			ft_philo_end_wait_kill(t_sveil *surveil);
+int			ft_philo_end_wait_kill(t_sveil *surveil, pid_t ret_pid);
 int			ft_sem_close_unlink(t_sveil *surveil);
 
 int			ft_atoi(const char *str);
