@@ -6,7 +6,7 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/15 07:36:01 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/30 17:21:48 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/30 18:51:26 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,11 +36,7 @@ int	ft_init_surveil_argument(int argc, char **argv, t_prg *prg)
 		|| prg->surveil->time_to_die <= 0 || prg->surveil->time_to_eat <= 0
 		|| prg->surveil->time_to_sleep <= 0
 		|| (argc == 6 && prg->surveil->number_to_eat <= 0))
-	{
-		free(prg->surveil);
-		prg->surveil = 0;
 		return (1);
-	}
 	return (0);
 }
 
@@ -48,16 +44,16 @@ int	ft_mem_alloc_philo_semas_pids(t_prg *prg)
 {
 	prg->surveil->ipc_sems = (t_ipc_sem *)malloc(sizeof(t_ipc_sem));
 	if (prg->surveil->ipc_sems == 0)
-		exit(1);
+		return (1);
 	memset(prg->surveil->ipc_sems, 0, sizeof(t_ipc_sem));
 	prg->philo = (t_philo *)malloc(sizeof(t_philo));
 	if (prg->philo == 0)
-		exit(1);
+		return (1);
 	memset(prg->philo, 0, sizeof(t_philo));
 	prg->surveil->pid_array
 		= (pid_t *)malloc(sizeof(pid_t) * prg->surveil->philo_num);
 	if (prg->surveil->pid_array == 0)
-		exit(1);
+		return (1);
 	memset(prg->surveil->pid_array, 0, sizeof(int) * prg->surveil->philo_num);
 	prg->philo->surveil = prg->surveil;
 	return (0);
