@@ -6,7 +6,7 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/22 16:41:47 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/30 18:57:37 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/30 19:12:09 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@
 
 int	ft_surveil_end(t_prg *prg)
 {
-	int			i;
 	t_sveil		*surveil;
 
 	surveil = prg->surveil;
