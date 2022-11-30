@@ -6,7 +6,7 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/14 16:56:00 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/30 18:54:21 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/30 19:07:14 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,10 @@
 # define PHILOSOPHERS_BONUS_H
 
 # include <pthread.h>
+# include <semaphore.h>
 
 # include <fcntl.h>
 
-# include <semaphore.h>
 # include <stdint.h>
 
 typedef enum e_odd_even_last{
@@ -25,11 +25,6 @@ typedef enum e_odd_even_last{
 	E_EVEN = 1,
 	E_LAST
 }			t_eat_type;
-
-typedef enum e_lock_unlock_napkin{
-	E_LOCK = 0,
-	E_UNLOCK
-}			t_l_u_lock_napkin;
 
 typedef enum e_semaphore_name_array{
 	E_START_EAT = 0,
@@ -67,12 +62,12 @@ typedef struct s_surveil{
 	uint64_t		time_to_die_micro;
 	int				number_to_eat;
 	uint64_t		start_time;
-	int				surveil_napkin;
-	int				surveil_done_eat;
+	pid_t			*pid_array;
+	pid_t			surveil_napkin;
+	pid_t			surveil_done_eat;
+	t_ipc_sem		*ipc_sems;
 	char			**sem_name_arr;
 	int				max_sem_name;
-	t_ipc_sem		*ipc_sems;
-	pid_t			*pid_array;
 }			t_sveil;
 
 typedef struct s_philosopher{
