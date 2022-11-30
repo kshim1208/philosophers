@@ -6,7 +6,7 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/15 07:36:01 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/28 10:03:19 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/30 18:22:07 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,8 @@ int	ft_init_surveil_argument(int argc, char **argv, t_prg *prg)
 		prg->surveil->number_to_eat = ft_atoi(argv[5]);
 	else
 		prg->surveil->number_to_eat = -1;
-	if (prg->surveil->philo_num <= 0 || prg->surveil->time_to_die <= 0
-		|| prg->surveil->time_to_eat <= 0
+	if (prg->surveil->philo_num <= 0 || prg->surveil->philo_num <= 200
+		|| prg->surveil->time_to_die <= 0 || prg->surveil->time_to_eat <= 0
 		|| prg->surveil->time_to_sleep <= 0
 		|| (argc == 6 && prg->surveil->number_to_eat <= 0))
 	{

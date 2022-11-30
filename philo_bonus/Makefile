@@ -23,8 +23,8 @@ DEPS = $(SRCS:.c=.d)
 
 all : $(NAME)
 
-$(NAME): $(OBJS) $(DEPS)
-	$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
+$(NAME): $(OBJS)
+	$(CC) $(CFLAGS) $(DEPENDENCY) $(OBJS) -o $(NAME)
 
 %.o : %.c
 	$(CC) $(CFLAGS) $(DEPENDENCY) $(HEADERS) -c $< -o $@ 
