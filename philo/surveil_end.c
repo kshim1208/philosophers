@@ -6,7 +6,7 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/22 16:41:47 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/30 19:12:09 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/30 19:13:06 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ int	ft_surveil_end(t_prg *prg)
 		if (surveil->stop != 1)
 		{
 			pthread_mutex_unlock(surveil->done);
-			i = 0;
 			if (ft_surveil_end_last_eat(prg -> philo_arr, surveil) != 0)
 				return (1);
 		}
