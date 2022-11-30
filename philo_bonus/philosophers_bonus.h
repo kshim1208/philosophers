@@ -6,7 +6,7 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/14 16:56:00 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/29 15:08:29 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/30 13:38:34 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ int			ft_philo_sleep_think(t_philo *philo, t_sveil *surveil);
 
 int			ft_surveil_done_eat(t_sveil *surveil);
 int			ft_finish_philosophers(t_prg *prg, t_sveil *surveil);
-int			ft_philo_end_wait_kill(t_sveil *surveil, int ret_pid);
+int			ft_philo_end_wait_kill(t_sveil *surveil);
 int			ft_sem_close_unlink(t_sveil *surveil);
 
 int			ft_atoi(const char *str);

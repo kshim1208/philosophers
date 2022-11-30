@@ -6,7 +6,7 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/15 07:36:01 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/29 13:57:55 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/30 13:36:29 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ void	ft_philo_sem_open_all(t_sveil *surveil)
 	surveil->ipc_sems->last_eat
 		= ft_philo_sem_open(surveil->sem_name_arr[E_LAST_EAT], 1);
 	surveil->ipc_sems->finish
-		= ft_philo_sem_open(surveil->sem_name_arr[E_FINISH], 1);
+		= ft_philo_sem_open(surveil->sem_name_arr[E_FINISH], 0);
 	return ;
 }
 
