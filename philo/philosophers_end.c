@@ -6,7 +6,7 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/22 16:57:16 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/24 09:05:02 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/30 19:28:21 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,10 @@ void	ft_finish_clear_surveil(t_sveil *surveil)
 		{
 			pthread_mutex_destroy(surveil->done);
 			free(surveil->done);
+		}
+		if (surveil->fork_state != 0)
+		{
+			free(surveil->fork_state);
 		}
 		free(surveil);
 	}
