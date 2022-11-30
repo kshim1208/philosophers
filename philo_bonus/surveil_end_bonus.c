@@ -6,17 +6,14 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/22 16:41:47 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/30 16:53:45 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/30 17:23:57 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>
 
 #include "./philosophers_bonus.h"
-
-#include <signal.h>
 
 int	ft_surveil_end(t_philo *philo)
 {

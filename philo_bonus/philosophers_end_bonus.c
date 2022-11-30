@@ -6,7 +6,7 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/22 16:57:16 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/30 16:45:26 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/30 17:20:50 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,6 @@
 #include <sys/wait.h>
 
 #include "./philosophers_bonus.h"
-
-#include <stdio.h>
 
 int	ft_finish_philosophers(t_prg *prg, t_sveil *surveil)
 {

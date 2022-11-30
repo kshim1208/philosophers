@@ -3,12 +3,6 @@ NAME = philo_bonus
 CC = cc
 CFLAGS = -Wall -Wextra -Werror
 
-
-
-DEBUG = -g
-
-
-
 RM = rm
 RMFLAGS = -f
 
@@ -21,14 +15,14 @@ OBJS = $(SRCS:.c=.o)
 
 all : $(NAME)
 
-$(NAME): $(OBJS) $(DEPS)
-	$(CC) $(CFLAGS)        $(DEBUG)       $(OBJS) -o $(NAME)
+$(NAME): $(OBJS)
+	$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
 
 %.o : %.c
-	$(CC) $(CFLAGS)        $(DEBUG)       $(HEADERS) -c $< -o $@ 
+	$(CC) $(CFLAGS) $(HEADERS) -c $< -o $@ 
 
 clean:
-	$(RM) $(RMFLAGS) $(OBJS) $(DEPS)
+	$(RM) $(RMFLAGS) $(OBJS)
 
 fclean: clean
 	$(RM) $(RMFLAGS) $(NAME)

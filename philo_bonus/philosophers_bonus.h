@@ -6,7 +6,7 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/14 16:56:00 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/30 16:11:26 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/30 17:20:42 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 # include <pthread.h>
 
-# include <fcntl.h>           /* For O_* constants */
+# include <fcntl.h>
 
 # include <semaphore.h>
 # include <stdint.h>

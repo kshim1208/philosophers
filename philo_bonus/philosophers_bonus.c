@@ -6,7 +6,7 @@
 /*   By: kshim <kshim@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/15 07:53:02 by kshim             #+#    #+#             */
-/*   Updated: 2022/11/30 16:53:08 by kshim            ###   ########.fr       */
+/*   Updated: 2022/11/30 17:21:53 by kshim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,6 @@
 #include <unistd.h>
 
 #include "./philosophers_bonus.h"
-
-#include <stdio.h>
 
 int	ft_phiosophers_start(t_prg *prg, t_philo *philo, t_sveil *surveil)
 {
