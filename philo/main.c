@@ -12,8 +12,6 @@
 
 #include "./philosophers.h"
 
-#include <stdlib.h>
-
 int	main(int argc, char **argv)
 {
 	t_prg	prg;
